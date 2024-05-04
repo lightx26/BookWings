@@ -13,14 +13,10 @@
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label for="id_username">Phone Number or Email</label>
-                {{ form.username }}
+                <label for="id_address">Address</label>
+                {{ form.address }}
             </div>
-            <div class="form-group">
-                <label for="id_password">Password</label>
-                {{ form.password }}
-            </div>
-            <button type="submit" class="btn">Login</button>
+            <button type="submit" class="btn">Update</button>
         </form>
     </div>
 </body>
