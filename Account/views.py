@@ -8,7 +8,6 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 
 
-
 # Create your views here.
 
 
@@ -51,7 +50,7 @@ def accountChangePassword(request):
             user = request.user
             if user.check_password(form.cleaned_data['old_password']):
                 user.set_password(form.cleaned_data['new_password'])
-                user.save()                              # Save the new password to database
+                user.save()  # Save the new password to database
                 update_session_auth_hash(request, user)  # Prevent user from being logged out
                 return redirect('home')
     else:
