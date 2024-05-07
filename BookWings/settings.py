@@ -31,14 +31,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Account.apps.AccountConfig',
-    "Book.apps.BookConfig"
+    'accounts.apps.AccountConfig',
+    "books.apps.BookConfig",
+    "orders.apps.OrdersConfig",
+    "coupons.apps.CouponsConfig",
+    "cart.apps.CartConfig"
 ]
 
 MIDDLEWARE = [
@@ -85,7 +88,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'Account.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

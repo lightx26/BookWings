@@ -13,8 +13,16 @@
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label for="id_address">Address</label>
-                {{ form.address }}
+                <label for="id_local_address">Address</label>
+                {{ form.local_address }}
+            </div>
+            <div class="form-group">
+                <label for="id_district">Address</label>
+                {{ form.district }}
+            </div>
+            <div class="form-group">
+                <label for="id_province">Address</label>
+                {{ form.province }}
             </div>
             <button type="submit" class="btn">Update</button>
         </form>

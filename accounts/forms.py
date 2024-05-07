@@ -31,7 +31,7 @@ class ChangePasswordForm(forms.Form):
 class UserAddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ['address']
+        fields = ['local_address', 'district', 'province']
         widgets = {
             'address': forms.Textarea(attrs={'rows': 3}),
         }

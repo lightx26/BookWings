@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from Book.forms import AddBookForm
+from books.forms import AddBookForm
 
 
 # Create your views here.
