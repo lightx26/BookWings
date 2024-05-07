@@ -52,7 +52,7 @@ class User(AbstractBaseUser):
         self._is_staff = value
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'gender']
 
     objects = UserManager()
 

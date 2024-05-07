@@ -6,6 +6,7 @@ from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
+from cart.models import Cart
 
 
 # Create your views here.
@@ -18,6 +19,10 @@ def accountRegister(request):
             user = form.save(commit=False)  # Don't save just yet
             user.set_password(form.cleaned_data['password'])  # Set password securely
             user.save()
+
+            cart = Cart(customer=user)
+            cart.save()
+
             login(request, user)  # Log in the newly registered user
             return redirect('home')  # Redirect to your desired page after registration
     else:
