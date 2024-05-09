@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+</head>
+<body>
+    <h1>Books</h1>
+    <ul>
+        {% for book in books %}
+        	<li>
+            <div>
+                {{ book.title }} by {{ book.author }} <br/>
+                price: {{ book.price }}
+                <div>Tags:
+                    {% for tag in book.tags.all %}
+                	{{ tag }}
+                    {% endfor %}
+                </div>
+
+                <a href="/books/{{ book.id }}">Details</a>
+            </div>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

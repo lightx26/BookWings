@@ -7,6 +7,15 @@ from books.models import Book
 class Cart(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
+    def add(self, book, add_quantity):
+        if BookInCart.objects.filter(cart=self, book=book).exists():
+            book_in_cart = BookInCart.objects.get(cart=self, book=book)
+            book_in_cart.quantity += add_quantity
+            book_in_cart.save()
+        else:
+            book_in_cart = BookInCart(cart=self, book=book, quantity=add_quantity)
+            book_in_cart.save()
+
 
 class BookInCart(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
