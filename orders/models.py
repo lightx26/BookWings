@@ -13,10 +13,15 @@ class Order(models.Model):
     status = models.BooleanField(default=False)
 
 
+class Shipping(models.Model):
+    shipping_company_name = models.CharField(max_length=255)
+    shipping_fee = models.DecimalField(max_digits=10, decimal_places=2)
+
+
 class DeliveryInformation(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
-    shipping_company = models.CharField(max_length=255)
+    shipping_company = models.ForeignKey(Shipping, on_delete=models.CASCADE)
     start_delivery_date = models.DateTimeField(auto_now_add=True)
     finish_delivery_date = models.DateTimeField(default=None, null=True)
     delivery_fee = models.DecimalField(max_digits=10, decimal_places=2)

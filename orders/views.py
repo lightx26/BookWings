@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import Order, DeliveryInformation, BookInOrder
+from .models import Order, DeliveryInformation, BookInOrder, Shipping
 
 
 # Create your views here.
@@ -25,7 +25,7 @@ def prepare_order(request):
 
 @login_required
 def make_order(request):
-    prepared_order = request.session.get('prepared_order')
+    prepared_order = request.session.pop('prepared_order')
     if request.method == 'POST':
         order = Order.objects.create(
             customer=request.user,
@@ -38,10 +38,11 @@ def make_order(request):
         delivery_info = DeliveryInformation.objects.create(
             order=order,
             address=request.POST.get('address'),
-            shipping_company=request.POST.get('shipping_company'),
-            # TODO: Calculate delivery fee
-            delivery_fee=request.POST.get('delivery_fee')
+            shipping_company=Shipping.objects.get(pk=request.POST.get('shipping_company')),
         )
+
+        delivery_info.delivery_fee = delivery_info.shipping_company.shipping_fee
+        delivery_info.save()
 
         books = prepared_order.get('books')
         quantities = prepared_order.get('quantities')
