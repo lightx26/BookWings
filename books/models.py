@@ -27,5 +27,6 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
-
-
+    # def add_tag(self, tag):
+    #     self.tags.add(tag)
+    #     self.save()

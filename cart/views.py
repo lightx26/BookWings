@@ -7,10 +7,9 @@ from books.models import Book
 # Create your views here.
 @login_required
 def add_to_cart(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
     cart = Cart.objects.get(customer=request.user)
     quantity = request.POST.get('quantity', 1)
-    cart.add(book, quantity)
+    cart.add(book_id, quantity)
 
 
 @login_required
