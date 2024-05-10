@@ -7,6 +7,9 @@ from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from cart.models import Cart
+from .models import Address
+
+import accounts.services as accounts_services
 
 
 # Create your views here.
@@ -82,3 +85,16 @@ def accountUpdateAddress(request):
 
     context = {'form': form}
     return render(request, 'update_address.html', context)
+
+
+def remove_address(request):
+    if request.method == 'POST':
+        address_ids = request.POST.getlist('addresses[]')
+        for address_id in address_ids:
+            address = accounts_services.get_address_by_id(address_id)
+            address.delete()
+
+        return redirect('home')
+
+    addresses = accounts_services.get_addresses_by_user(request.user)
+    return render(request, 'remove_address.html', {'addresses': addresses})

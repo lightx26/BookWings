@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Make order</title>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <div>
+        <label for="address">Address</label>
+        <select name="address" id="address">
+            {% for address in addresses %}
+                <option value="{{ address.id }}">{{ address.local_address }}, {{ address.district }}, {{ address.province }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="shipping_company">Shipping company</label>
+        <select name="shipping_company" id="shipping_company">
+            {% for shipping_company in shipping_companies %}
+                <option value="{{ shipping_company.id }}">{{ shipping_company.shipping_company_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <label for="coupon">Apply coupon</label>
+    {% for coupon in coupons %}
+        <input id="coupon" type="checkbox" name="coupons[]" value="{{ coupon.id }}">
+    {% endfor %}
+    <input type="submit" value="Order">
+</form>
+</body>
+</html>

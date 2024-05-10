@@ -5,11 +5,22 @@
     <title>My cart</title>
 </head>
 <body>
+<form action="{% url 'prepare_order' %}" method="POST">
+    {% csrf_token %}
     {% for book in books %}
-        <li>
-            <p>{{ book.book.title }}</p>
-            <p>{{ book.book.price }}</p>
-        </li>
+        <div>
+            <p>Title: {{ book.book.title }}</p>
+            <p>Price: {{ book.book.price }}</p>
+            <label>
+                <input type="number" name="quantities[]" value="{{ book.quantity }}">
+            </label>
+        </div>
+        <label>
+            <input type="checkbox" name="books[]" value="{{ book.book.id }}">
+        </label>
     {% endfor %}
+    <br>
+    <button type="submit">Purchase</button>
+</form>
 </body>
 </html>

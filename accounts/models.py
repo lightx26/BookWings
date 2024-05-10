@@ -63,6 +63,7 @@ class User(AbstractBaseUser):
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    local_address = models.CharField(max_length=255)
+    local_address = models.CharField(max_length=255)  # No. 120, Street 271 or Mango Pagoda, 3rd Floor
+    commune = models.CharField(max_length=255)
     district = models.CharField(max_length=255)
     province = models.CharField(max_length=255)

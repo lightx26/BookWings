@@ -21,4 +21,7 @@ class Coupon(models.Model):
     usage_type = models.CharField(max_length=20, choices=UsageType.choices)
     usage_limit = models.IntegerField()
     is_expired = models.BooleanField(default=False)
-    minimum_order_value = models.DecimalField(max_digits=10, decimal_places=2)
+    min_order_value = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return self.code

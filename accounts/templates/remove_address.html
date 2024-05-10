@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/authForms.css' %}"> <!-- Link to your CSS file -->
+</head>
+<body>
+<div class="container">
+    <h2>Remove address</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for address in addresses %}
+            <div class="form-group">
+                <label for="id_address">
+                    {{ address.local_address }},
+                    {{ address.commune }},
+                    {{ address.district }},
+                    {{ address.province }}
+                </label>
+                <input type="checkbox" name="addresses[]" value="{{ address.id }}" id="id_address">
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn">Remove</button>
+    </form>
+</div>
+</body>
+</html>

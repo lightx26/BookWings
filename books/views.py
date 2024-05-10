@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
-from books.forms import AddBookForm
 from books.models import Book
+import books.services as books_services
 
 
 # Create your views here.
@@ -21,10 +21,10 @@ from books.models import Book
 
 
 def view_books(request):
-    books = Book.objects.all()
+    books = books_services.get_all_books()
     return render(request, 'books.html', {'books': books})
 
 
 def view_book_details(request, book_id):
-    book = Book.objects.get(pk=book_id)
+    book = books_services.get_book_by_id(book_id)
     return render(request, 'book_details.html', {'book': book})
