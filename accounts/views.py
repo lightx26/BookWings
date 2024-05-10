@@ -7,7 +7,6 @@ from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from cart.models import Cart
-from .models import Address
 
 import accounts.services as accounts_services
 
@@ -46,12 +45,12 @@ class UserLoginView(LoginView):
         return reverse_lazy('home')  # Redirect to your desired page after login
 
 
-def accountLogout(request):
+def log_out(request):
     logout(request)
     return redirect('home')
 
 
-def accountChangePassword(request):
+def change_password(request):
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST)
         if form.is_valid():
@@ -72,7 +71,7 @@ def accountChangePassword(request):
 #     return render(request, 'profile.html')
 
 
-def accountUpdateAddress(request):
+def update_address(request):
     if request.method == 'POST':
         form = UserAddressForm(request.POST)
         if form.is_valid():

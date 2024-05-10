@@ -22,7 +22,11 @@ import books.services as books_services
 
 def view_books(request):
     books = books_services.get_all_books()
-    return render(request, 'books.html', {'books': books})
+    return render(request, 'books.html',
+                  {
+                      'books': books,
+                      'count': books.count()
+                  })
 
 
 def view_book_details(request, book_id):

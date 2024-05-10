@@ -7,7 +7,7 @@ from coupons.models import Coupon
 # Create your models here.
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    coupon = models.ManyToManyField(Coupon, null=True, blank=True)
+    coupon = models.ManyToManyField(Coupon)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     date_ordered = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=False)

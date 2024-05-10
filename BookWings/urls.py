@@ -18,9 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 
+import books.views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', TemplateView.as_view(template_name='homepage.html'), name='home'),
+    path('', books.views.view_books),
+    path('home', books.views.view_books),
+    # path('home/', TemplateView.as_view(template_name='homepage.html'), name='home'),
     path('', include('accounts.urls')),
     path('books/', include('books.urls')),
     path('cart/', include('cart.urls')),
