@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Cart, BookInCart
 import cart.services as cart_services
@@ -8,10 +9,8 @@ import cart.services as cart_services
 @login_required
 def add_to_cart(request, book_id):
     cart = cart_services.get_cart(request.user)
-    quantity = request.POST.get('quantity', 1)
-    cart.add(book_id, quantity)
-    return redirect('view_cart')
-
+    cart.add(book_id, 1)
+    return HttpResponse("Book added to cart")
 
 @login_required
 def view_cart(request):

@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "books.apps.BookConfig",
     "orders.apps.OrdersConfig",
     "coupons.apps.CouponsConfig",
-    "cart.apps.CartConfig"
+    "cart.apps.CartConfig",
+    'django_filters',
 ]
 
 MIDDLEWARE = [

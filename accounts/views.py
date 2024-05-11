@@ -12,8 +12,6 @@ import accounts.services as accounts_services
 
 
 # Create your views here.
-
-
 def accountRegister(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)  # Use form if available
