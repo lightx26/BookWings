@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
-
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.core import serializers
 from books.models import Book
 import books.services as books_services
 
@@ -22,9 +23,12 @@ import books.services as books_services
 
 def view_books(request):
     books = books_services.get_all_books()
+    paginator = Paginator(books, 15)
+    page = request.GET.get('page', 1)
+    # books_json = serializers.serialize("json", books)
     return render(request, 'books.html',
                   {
-                      'books': books,
+                      'books': paginator.page(page),
                       'count': books.count()
                   })
 

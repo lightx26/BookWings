@@ -21,7 +21,7 @@ class Book(models.Model):
     edition = models.IntegerField()
     be_sold = models.IntegerField(default=0)
     status = models.BooleanField(default=True)
-    # cover = models.ImageField(upload_to='covers/', null=True, blank=True)
+    cover = models.ImageField(upload_to='books/', null=True, blank=True)
     tags = models.ManyToManyField(Category, related_name='tags')
 
     def __str__(self):

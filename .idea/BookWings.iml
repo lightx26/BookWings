@@ -18,6 +18,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="bootstrap-icons" level="application" />
+    <orderEntry type="library" name="bootstrap" level="application" />
     <orderEntry type="library" name="bootstrap" level="application" />
   </component>
   <component name="TemplatesService">
@@ -27,6 +29,7 @@
         <option value="$MODULE_DIR$/templates" />
         <option value="$MODULE_DIR$/cart/templates" />
         <option value="$MODULE_DIR$/orders/templates" />
+        <option value="$MODULE_DIR$/books/templates" />
       </list>
     </option>
   </component>
