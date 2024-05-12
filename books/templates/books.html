@@ -21,8 +21,27 @@
                 {% if input_title == '' %}
                     <input type="text" id="search" name="search" class="form-control" placeholder="Search for books...">
                 {% else %}
-                    <input type="text" id="search" name="search" class="form-control" placeholder="Search for books..." value="{{ input_title }}">
+                    <input type="text" id="search" name="search" class="form-control" placeholder="Search for books..."
+                           value="{{ input_title }}">
                 {% endif %}
+            </div>
+            <div class="col-auto">
+                <label for="category" class="sr-only">Category</label>
+                <select id="category" name="category" class="form-control">
+                {% if category_id == 0 %}
+                    <option value="0" selected>All Categories</option>
+                {% else %}
+                    <option value="0">All Categories</option>
+                {% endif %} 
+                    <!-- Populate options dynamically from categories -->
+                    {% for category in categories %}
+                        {% if category.id == category_id %}
+                            <option value="{{ category.id }}" selected>{{ category.name }}</option>
+                        {% else %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary">Search</button>

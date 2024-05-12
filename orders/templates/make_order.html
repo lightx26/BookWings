@@ -23,9 +23,20 @@
             {% endfor %}
         </select>
     </div>
-    <label for="coupon">Apply coupon</label>
+    <div>
+        <h3>Apply coupons</h3>
+    </div>
     {% for coupon in coupons %}
-        <input id="coupon" type="checkbox" name="coupons[]" value="{{ coupon.id }}">
+        <div>
+            {% if coupon.type == 'PERCENTAGE' %}
+                <label for="coupon">{{ coupon.code }} - Discount: {{ coupon.discount }}%</label>
+            {% else %}
+                <label for="coupon">{{ coupon.code }} - Discount: ${{ coupon.discount }}</label>
+            {% endif %}
+            <input id="coupon" type="checkbox" name="coupons[]" value="{{ coupon.id }}">
+        </div>
+
+
     {% endfor %}
     <input type="submit" value="Order">
 </form>

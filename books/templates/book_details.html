@@ -33,7 +33,7 @@
                         <span class="badge badge-primary">{{ tag }}</span>
                     {% endfor %}
                 </div>
-                <a href="#" class="btn btn-outline-primary mt-2" onclick="addToCart({{ book.id }})">
+                <a href="#" class="btn btn-outline-primary mt-2" id="add-to-cart">
                     <i class="bi bi-cart3"></i>
                     Add to Cart
                 </a>
@@ -49,6 +49,14 @@
 
 </body>
 <script>
+    $(document).ready(function () {
+        // Add to cart button click event
+        $("#add-to-cart").click(function (e) {
+            e.preventDefault();
+            addToCart({{ book.id }});
+        });
+    });
+    
     function addToCart(bookId) {
         $.ajax({
             url: `/cart/add-to-cart/${bookId}/`,

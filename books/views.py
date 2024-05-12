@@ -31,15 +31,21 @@ def view_books(request):
 
 def view_books_by_filter(request):
     input_title = request.GET.get('search', '').strip()
-    # category = books_services.get_category_by_id(request.GET.get('category', None))
-    books = books_services.get_books_by_filter(input_title)
+    category_id = int(request.GET.get('category', 0))
+    category = books_services.get_category_by_id(category_id)
+
+    books = books_services.get_books_by_filter(input_title, category)
+    categories = books_services.get_all_categories()
+
     paginator = Paginator(books, 15)
     page = request.GET.get('page', 1)
 
     return render(request, 'books.html',
                   {
                       'books': paginator.page(page),
+                      'categories': categories,
                       'input_title': input_title,
+                      'category_id': category_id,
                   })
 
 
