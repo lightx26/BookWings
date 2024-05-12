@@ -16,6 +16,12 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+from dotenv import load_dotenv
+from pathlib import Path
+
+dotenv_path = Path('.env')
+load_dotenv(dotenv_path=dotenv_path)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -85,9 +91,9 @@ WSGI_APPLICATION = 'BookWings.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bookwings',
-        'USER': 'root',
-        'PASSWORD': 'nguyenhung1903',
+        'NAME': os.getenv('DB_NAME'), 
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
     }
 }
 

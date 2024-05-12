@@ -1,6 +1,3 @@
-# Fix settings for Django
-BookWings/settings.py
-
 #
 __pycache__/*
 configs/__pycache__/*
