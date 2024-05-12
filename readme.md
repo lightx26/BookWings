@@ -29,7 +29,7 @@ Sau khi cài đặt các gói hệ thống ở trên, ta tiến hành cài đặ
 $ pip install -r requirements.txt
 ```
 
-### Thiết lập kết nối Database
+### Một số thiết lập với Database
 Hệ thống sử dụng mysql làm cơ sở dữ liệu, nên do đó, máy tính cần có các thiết lập liên quan đến mysql-client, sau khi thiết lập thông tin kết nối tại `BookWings/settings.py`. Chúng ta cần chạy cú pháp sau để khởi tạo các bảng và **migrate** dữ liệu.
 
 ```bash
