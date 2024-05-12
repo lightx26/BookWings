@@ -83,3 +83,13 @@ def make_order(request):
                    'addresses': addresses,
                    'shipping_companies': shipping_companies,
                    'coupons': coupons})
+
+
+# @login_required
+# def payment(request, order_id):
+#     order = order_services.get_order_by_id(order_id)
+#     if request.method == 'POST':
+#         order.status = 'PAID'
+#         order.save()
+#         return redirect('home')
+#     return render(request, 'payment.html', {'order': order})
