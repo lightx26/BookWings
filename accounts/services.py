@@ -1,4 +1,4 @@
-from accounts.models import Address, User, CustomerRank
+from accounts.models import Address, User, CustomerRank, CustomerRankConditions
 import orders.services as order_services
 
 
@@ -8,6 +8,8 @@ def get_addresses_by_user(user):
 
 def get_address_by_id(address_id):
     return Address.objects.get(pk=address_id)
+
+
 
 
 def check_rank_up(customer):
@@ -22,7 +24,7 @@ def check_rank_up(customer):
             total_spent += order.total
 
     for rank in range(CustomerRank.DIAMOND, customer.rank, -1):
-        if total_spent >= (CustomerRank.RANK_SPENT_CONDITIONS)[rank] and orders.count() >= (CustomerRank.RANK_ORDER_CONDITIONS)[rank]:
+        if total_spent >= CustomerRankConditions.RANK_SPENT_CONDITIONS[rank] and orders.count() >= CustomerRank.RANK_ORDER_CONDITIONS[rank]:
             return rank
 
     return customer.rank
