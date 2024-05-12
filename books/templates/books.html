@@ -64,7 +64,7 @@
                     <span class="badge badge-primary">{{ tag }}</span>
                 {% endfor %}
             </div>
-            <a href="{% url 'view_book_details' book.id %}" class="btn btn-primary mt-2">
+            <a href="{% url 'view_book_details' book.id book.slug %}" class="btn btn-primary mt-2">
                 <i class="bi bi-book-half mr-2"></i>
                 Have a look
             </a>

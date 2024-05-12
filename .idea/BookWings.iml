@@ -30,6 +30,8 @@
         <option value="$MODULE_DIR$/cart/templates" />
         <option value="$MODULE_DIR$/orders/templates" />
         <option value="$MODULE_DIR$/books/templates" />
+        <option value="$MODULE_DIR$/accounts/templates" />
+        <option value="$MODULE_DIR$/coupons/templates" />
       </list>
     </option>
   </component>

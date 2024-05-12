@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core import serializers
 from books.models import Book
 import books.services as books_services
@@ -49,6 +49,8 @@ def view_books_by_filter(request):
                   })
 
 
-def view_book_details(request, book_id):
+def view_book_details(request, book_id, book_slug):
     book = books_services.get_book_by_id(book_id)
+    if book_slug != book.slug:
+        return redirect('view_book_details', book_id=book_id, book_slug=book.slug, APPEND_SLASH=False)
     return render(request, 'book_details.html', {'book': book})

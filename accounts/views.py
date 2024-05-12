@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm, UserLoginForm, ChangePasswordForm, \
     UserAddressForm  # Import your registration form (if using
@@ -13,6 +14,9 @@ import accounts.services as accounts_services
 
 # Create your views here.
 def accountRegister(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)  # Use form if available
         if form.is_valid():
@@ -43,11 +47,13 @@ class UserLoginView(LoginView):
         return reverse_lazy('home')  # Redirect to your desired page after login
 
 
+@login_required
 def log_out(request):
     logout(request)
     return redirect('home')
 
 
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST)
@@ -69,6 +75,7 @@ def change_password(request):
 #     return render(request, 'profile.html')
 
 
+@login_required
 def update_address(request):
     if request.method == 'POST':
         form = UserAddressForm(request.POST)
@@ -84,6 +91,7 @@ def update_address(request):
     return render(request, 'update_address.html', context)
 
 
+@login_required
 def remove_address(request):
     if request.method == 'POST':
         address_ids = request.POST.getlist('addresses[]')
@@ -95,3 +103,9 @@ def remove_address(request):
 
     addresses = accounts_services.get_addresses_by_user(request.user)
     return render(request, 'remove_address.html', {'addresses': addresses})
+
+
+# TODO: View profile
+@login_required
+def view_profile(request):
+    return render(request, 'profile.html')

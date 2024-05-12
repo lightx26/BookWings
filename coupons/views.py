@@ -7,4 +7,4 @@ import coupons.services as coupon_services
 @login_required
 def view_my_coupons(request):
     available_coupons = coupon_services.get_available_coupons()
-    return render(request, 'coupons/my_coupons.html', {'coupons': available_coupons})
+    return render(request, 'my_coupons.html', {'coupons': available_coupons})

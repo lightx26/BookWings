@@ -26,17 +26,15 @@ class Book(models.Model):
     status = models.BooleanField(default=True)
     cover = models.ImageField(upload_to='books/', null=True, blank=True)
     tags = models.ManyToManyField(Category, related_name='tags')
-    slug = models.SlugField(max_length=100, unique=False)
+    slug = models.SlugField(max_length=100, unique=False, blank=True, editable=True)
 
     def __str__(self):
         return self.title
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
+    def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title, {locale: 'vi'})
-        super().save()
+            self.slug = slugify(self.title + " " + self.author, {locale: 'vi'})
+        super().save(*args, **kwargs)
 
     # def add_tag(self, tag):
     #     self.tags.add(tag)
