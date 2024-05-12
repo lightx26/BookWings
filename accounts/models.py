@@ -36,17 +36,17 @@ class CustomerRank(models.IntegerChoices):
 
 class CustomerRankConditions:
     RANK_ORDER_CONDITIONS = {
-        CustomerRank.SILVER: 20,
-        CustomerRank.GOLD: 80,
-        CustomerRank.PLATINUM: 150,
-        CustomerRank.DIAMOND: 300
+        CustomerRank.SILVER: 10,
+        CustomerRank.GOLD: 30,
+        CustomerRank.PLATINUM: 100,
+        CustomerRank.DIAMOND: 200
     }
 
     RANK_SPENT_CONDITIONS = {
-        CustomerRank.SILVER: 500,
-        CustomerRank.GOLD: 1000,
-        CustomerRank.PLATINUM: 1500,
-        CustomerRank.DIAMOND: 2000
+        CustomerRank.SILVER: 1000,
+        CustomerRank.GOLD: 3500,
+        CustomerRank.PLATINUM: 8000,
+        CustomerRank.DIAMOND: 15000
     }
 
 

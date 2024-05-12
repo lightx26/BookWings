@@ -24,7 +24,8 @@ def check_rank_up(customer):
             total_spent += order.total
 
     for rank in range(CustomerRank.DIAMOND, customer.rank, -1):
-        if total_spent >= CustomerRankConditions.RANK_SPENT_CONDITIONS[rank] and orders.count() >= CustomerRank.RANK_ORDER_CONDITIONS[rank]:
+        if (total_spent >= CustomerRankConditions.RANK_SPENT_CONDITIONS[rank]
+                and orders.count() >= CustomerRankConditions.RANK_ORDER_CONDITIONS[rank]):
             return rank
 
     return customer.rank
