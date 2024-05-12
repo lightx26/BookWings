@@ -10,6 +10,7 @@
 {% if user.is_authenticated %}
     <h3>Hello, {{ user.first_name }}</h3>
     <p><a href="{% url 'logout' %}">Logout</a></p>
+    <p><a href="{% url 'view_cart' %}">My cart</a></p>
 {% else %}
     <p><a href="{% url 'login' %}">Login</a></p>
     <p><a href="{% url 'register' %}">Register</a></p>

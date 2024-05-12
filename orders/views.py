@@ -60,13 +60,13 @@ def make_order(request):
             order.add_product(book, quantity)
 
         # Calculate total price
-        tmp_total = prepared_order.get('total')
+        tmp_total = Decimal(prepared_order.get('total'))
         for coupon in order.coupon.all():
-            if coupon.type == 'percentage':
+            if coupon.type == 'PERCENTAGE':
                 tmp_total -= tmp_total * coupon.discount / 100
             else:
                 tmp_total -= coupon.discount
-        order.total = delivery_info.delivery_fee + Decimal(tmp_total)
+        order.total = delivery_info.delivery_fee + tmp_total
 
         # Save order
         order_services.save_order(order)
