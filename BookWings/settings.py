@@ -81,12 +81,13 @@ WSGI_APPLICATION = 'BookWings.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# I think we need to use sqlite3 for the database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bookwings',
         'USER': 'root',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'nguyenhung1903',
     }
 }
 
