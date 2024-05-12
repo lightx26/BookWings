@@ -5,12 +5,18 @@ from coupons.models import Coupon
 
 
 # Create your models here.
+class OrderStatus(models.TextChoices):
+    PREPARING = 'PREPARING'
+    DELIVERING = 'DELIVERING'
+    COMPLETED = 'COMPLETED'
+
+
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     coupon = models.ManyToManyField(Coupon)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     date_ordered = models.DateTimeField(auto_now_add=True)
-    status = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=OrderStatus.choices, default=OrderStatus.PREPARING)
 
     def set_delivery_info(self, address, shipping_company, delivery_fee):
         return DeliveryInformation.objects.create(order=self,

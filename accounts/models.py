@@ -26,6 +26,28 @@ class UserManager(BaseUserManager):
 
 
 # Create your models here.
+class CustomerRank(models.IntegerChoices):
+    BRONZE = 0, 'Bronze'
+    SILVER = 1, 'Silver'
+    GOLD = 2, 'Gold'
+    PLATINUM = 3, 'Platinum'
+    DIAMOND = 4, 'Diamond'
+
+    RANK_ORDER_CONDITIONS = {
+        1: 20,
+        2: 80,
+        3: 150,
+        4: 300
+    }
+
+    RANK_SPENT_CONDITIONS = {
+        1: 500,
+        2: 1000,
+        3: 1500,
+        4: 2000
+    }
+
+
 class User(AbstractBaseUser):
     first_name = models.CharField(max_length=20, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
@@ -34,6 +56,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, blank=False, unique=True)
     gender = models.BooleanField(default=True)
 
+    rank = models.IntegerField(default=CustomerRank.BRONZE, choices=CustomerRank.choices)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
 
