@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from coupons.models import Coupon
 
 
@@ -12,7 +14,7 @@ def count_coupon_usage(coupon):
 
 def get_coupon_for_order(customer, order_value):
     coupons = Coupon.objects.filter(min_order_value__lte=order_value, min_customer_rank__lte=customer.rank,
-                                    is_expired=False,
+                                    expiration_date__gte=datetime.now(),
                                     usage_type='ORDER')
     valid_coupons = []
     for coupon in coupons:

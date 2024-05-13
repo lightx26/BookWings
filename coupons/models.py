@@ -22,7 +22,7 @@ class Coupon(models.Model):
     type = models.CharField(max_length=20, choices=CouponType.choices)
     usage_type = models.CharField(max_length=20, choices=UsageType.choices)
     usage_limit = models.IntegerField()
-    is_expired = models.BooleanField(default=False)
+    expiration_date = models.DateField()
     min_order_value = models.DecimalField(max_digits=10, decimal_places=2)
     min_customer_rank = models.IntegerField(choices=CustomerRank.choices, default=CustomerRank.BRONZE)
 
