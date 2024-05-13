@@ -10,12 +10,12 @@ def count_coupon_usage(coupon):
     return coupon.order_set.count()
 
 
-def get_coupon_for_order(order_value):
-    for_value_coupons = Coupon.objects.filter(min_order_value__lte=order_value,
-                                              is_expired=False,
-                                              usage_type='ORDER')
+def get_coupon_for_order(customer, order_value):
+    coupons = Coupon.objects.filter(min_order_value__lte=order_value, min_customer_rank__lte=customer.rank,
+                                    is_expired=False,
+                                    usage_type='ORDER')
     valid_coupons = []
-    for coupon in for_value_coupons:
+    for coupon in coupons:
         if count_coupon_usage(coupon) < coupon.usage_limit:
             valid_coupons.append(coupon)
     return valid_coupons

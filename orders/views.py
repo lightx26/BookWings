@@ -4,14 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from accounts.models import Address
-from books.models import Book
-from coupons.models import Coupon
-from .models import Order, DeliveryInformation, BookInOrder, Shipping
+from coupons.models import CouponType
+from .models import Shipping
 
 import orders.services as order_services
 import coupons.services as coupon_services
 import accounts.services as accounts_services
 import books.services as books_services
+import cart.services as cart_services
 
 
 # Create your views here.
@@ -47,43 +47,56 @@ def make_order(request):
             order.coupon.add(coupon_services.get_coupon_by_id(coupon_id))
 
         # Set delivery information
-        shipping_company = order_services.get_shipping_company_by_id(request.POST.get('shipping_company'))
-        delivery_info = order.set_delivery_info(Address.objects.get(pk=request.POST.get('address')),
-                                                shipping_company,
-                                                shipping_company.shipping_fee)
+        try:
+            shipping_company = order_services.get_shipping_company_by_id(request.POST.get('shipping_company'))
+        except Shipping.DoesNotExist:
+            # TODO: Redirect to error page
+            return redirect('home')
+
+        try:
+            address = accounts_services.get_address_by_id(request.POST.get('address'))
+        except Address.DoesNotExist:
+            return redirect('update-address')
+
+        delivery_info = order.set_delivery_info(address, shipping_company, shipping_company.shipping_fee)
 
         # Add products to order
-        books = prepared_order.get('books')
+        book_ids = prepared_order.get('books')
         quantities = prepared_order.get('quantities')
-        for book_id, quantity in zip(books, quantities):
+        for book_id, quantity in zip(book_ids, quantities):
             book = books_services.get_book_by_id(book_id)
             order.add_product(book, quantity)
 
         # Calculate total price
         tmp_total = Decimal(prepared_order.get('total'))
         for coupon in order.coupon.all():
-            if coupon.type == 'PERCENTAGE':
+            if coupon.type == CouponType.PERCENTAGE:
                 tmp_total -= tmp_total * coupon.discount / 100
-            else:
+            elif coupon.type == CouponType.FIXED:
                 tmp_total -= coupon.discount
         order.total = delivery_info.delivery_fee + tmp_total
 
         # Save order
         order_services.save_order(order)
         # return render(request, 'order_success.html')
+
+        # Remove books from cart
+        cart_services.get_cart(request.user).remove(book_ids)
+
+        # Clear unused session after processing
         request.session.pop('prepared_order')
+
         return redirect('home')
 
     addresses = accounts_services.get_addresses_by_user(request.user)
     shipping_companies = order_services.get_all_shipping_companies()
-    coupons = coupon_services.get_coupon_for_order(prepared_order.get('total'))
+    coupons = coupon_services.get_coupon_for_order(request.user, prepared_order.get('total'))
 
     return render(request, 'make_order.html',
                   {'prepared_order': prepared_order,
                    'addresses': addresses,
                    'shipping_companies': shipping_companies,
                    'coupons': coupons})
-
 
 # @login_required
 # def payment(request, order_id):

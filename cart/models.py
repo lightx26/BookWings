@@ -17,11 +17,9 @@ class Cart(models.Model):
             book_in_cart = BookInCart(cart=self, book=book, quantity=add_quantity)
             book_in_cart.save()
 
-    def remove(self, book_id):
-        book = Book.objects.get(pk=book_id)
-        if BookInCart.objects.filter(cart=self, book=book).exists():
-            book_in_cart = BookInCart.objects.get(cart=self, book=book)
-            book_in_cart.delete()
+    def remove(self, book_ids):
+        books = Book.objects.filter(pk__in=book_ids)
+        BookInCart.objects.filter(cart=self, book__in=books).delete()
 
     def decrease(self, book_id):
         book = Book.objects.get(pk=book_id)

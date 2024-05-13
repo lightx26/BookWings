@@ -10,9 +10,12 @@ def get_address_by_id(address_id):
     return Address.objects.get(pk=address_id)
 
 
-
-
 def check_rank_up(customer):
+    """
+    Check if the customer is eligible for a rank up
+    :param customer
+    :return: the rank that the customer should be promoted to
+    """
     if customer.rank == CustomerRank.DIAMOND:
         return CustomerRank.DIAMOND
 
