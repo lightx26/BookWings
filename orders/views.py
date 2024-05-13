@@ -83,6 +83,9 @@ def make_order(request):
         # Remove books from cart
         cart_services.get_cart(request.user).remove(book_ids)
 
+        # Check for rank promotion
+        accounts_services.rank_up(request.user)
+
         # Clear unused session after processing
         request.session.pop('prepared_order')
 

@@ -34,11 +34,11 @@ def check_rank_up(customer):
     return customer.rank
 
 
-def set_rank(customer, rank):
-    customer.rank = rank
+def rank_up(customer):
+    if customer.rank < CustomerRank.DIAMOND:
+        customer.rank = check_rank_up(customer)
     customer.save()
     return customer.rank
-
 
 # def rank_up(customer):
 #     if customer.rank < CustomerRank.DIAMOND:
