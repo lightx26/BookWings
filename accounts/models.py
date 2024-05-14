@@ -20,8 +20,8 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, phone_number, email, first_name, last_name, gender, password):
         user = self.create_user(phone_number, email, first_name, last_name, gender, password)
-        user.is_admin = True
-        user.rank = CustomerRank.DIAMOND
+        user.role = UserRole.ADMIN
+        user.rank = None
         user.save(using=self._db)
         return user
 
@@ -51,17 +51,29 @@ class CustomerRankConditions:
     }
 
 
+class UserRole(models.TextChoices):
+    CUSTOMER = 'CUSTOMER', 'Customer'
+    DELIVERER = 'DELIVERER', 'Deliverer'
+    ADMIN = 'ADMIN', 'Admin'
+
+
 class User(AbstractBaseUser):
+    phone_number = models.CharField(max_length=20, blank=False, unique=True)
+    # __password__
+    email = models.EmailField(max_length=255, blank=False, unique=True)
+
     first_name = models.CharField(max_length=20, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
-
-    phone_number = models.CharField(max_length=20, blank=False, unique=True)
-    email = models.EmailField(max_length=255, blank=False, unique=True)
     gender = models.BooleanField(default=True)
 
-    rank = models.IntegerField(default=CustomerRank.BRONZE, choices=CustomerRank.choices)
+    rank = models.IntegerField(default=CustomerRank.BRONZE, choices=CustomerRank.choices, null=True)
+
     date_joined = models.DateTimeField(auto_now_add=True)
-    is_admin = models.BooleanField(default=False)
+    role = models.CharField(max_length=20, choices=UserRole.choices, default=UserRole.CUSTOMER)
+
+    @property
+    def is_admin(self):
+        return self.role == UserRole.ADMIN
 
     @property
     def is_staff(self):
@@ -88,7 +100,9 @@ class User(AbstractBaseUser):
 
 
 class Address(models.Model):
+    # Relationships
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Attributes
     local_address = models.CharField(max_length=255)  # No. 120, Street 271 or Mango Pagoda, 3rd Floor
     commune = models.CharField(max_length=255)
     district = models.CharField(max_length=255)

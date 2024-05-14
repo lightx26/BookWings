@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "coupons.apps.CouponsConfig",
     "cart.apps.CartConfig",
     'django_filters',
+    "delivery.apps.DeliveryConfig"
 ]
 
 MIDDLEWARE = [

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 from accounts.models import Address
 from coupons.models import CouponType
-from .models import Shipping
+from delivery.models import Shipping
 
 import orders.services as order_services
 import coupons.services as coupon_services

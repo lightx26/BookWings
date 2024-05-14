@@ -1,4 +1,5 @@
-from orders.models import Shipping, Order, OrderStatus
+from delivery.models import Shipping, DeliveryStatus
+from orders.models import Order
 
 
 def get_all_shipping_companies():
@@ -19,8 +20,7 @@ def get_orders_by_customer(customer):
 
 def create_order(customer, total):
     return Order.objects.create(customer=customer,
-                                total=total,
-                                status=OrderStatus.PREPARING)
+                                total=total)
 
 
 def save_order(order):

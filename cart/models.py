@@ -5,7 +5,8 @@ from books.models import Book
 
 # Create your models here.
 class Cart(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    # Relationships
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
 
     def add(self, book_id, add_quantity):
         book = Book.objects.get(pk=book_id)
@@ -41,6 +42,9 @@ class Cart(models.Model):
 
 
 class BookInCart(models.Model):
+    # Relationships
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
+
+    # Attributes
     quantity = models.IntegerField(default=1)
