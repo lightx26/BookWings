@@ -4,3 +4,4 @@ pymysql
 mysqlclient
 Pillow
 python-dotenv
+unidecode
