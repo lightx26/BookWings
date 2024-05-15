@@ -71,7 +71,7 @@ def make_order(request):
         tmp_total = Decimal(prepared_order.get('total'))
         for coupon in order.coupon.all():
             if coupon.type == CouponType.PERCENTAGE:
-                tmp_total -= tmp_total * coupon.discount / 100
+                tmp_total -= min(tmp_total * coupon.discount / 100, coupon.max_discount)
             elif coupon.type == CouponType.FIXED:
                 tmp_total -= coupon.discount
         order.total = delivery_info.delivery_fee + tmp_total

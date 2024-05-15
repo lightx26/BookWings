@@ -36,3 +36,6 @@ class DeliveryInformation(models.Model):
     finish_delivery_date = models.DateTimeField(default=None, null=True)
     delivery_fee = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=DeliveryStatus.choices, default=DeliveryStatus.PREPARING)
+
+    def __str__(self):
+        return f'Delivery for order {self.order.id}'

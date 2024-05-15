@@ -94,6 +94,9 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
+    def __str__(self):
+        return self.phone_number
+
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
@@ -107,3 +110,9 @@ class Address(models.Model):
     commune = models.CharField(max_length=255)
     district = models.CharField(max_length=255)
     province = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f'{self.local_address}, {self.commune}, {self.district}, {self.province}'
+
+    class Meta:
+        verbose_name_plural = 'addresses'

@@ -26,6 +26,9 @@ class Order(models.Model):
     def add_product(self, book, quantity):
         return BookInOrder.objects.create(order=self, book=book, quantity=quantity)
 
+    def __str__(self):
+        return f'Order {self.id}'
+
 
 class BookInOrder(models.Model):
     # Relationships
