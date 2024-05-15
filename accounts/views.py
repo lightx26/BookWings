@@ -1,13 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import UserRegistrationForm, UserLoginForm, ChangePasswordForm, \
-    UserAddressForm  # Import your registration form (if using
-# one)
-from django.contrib.auth import login, update_session_auth_hash
+from .forms import UserRegistrationForm, ChangePasswordForm, UserAddressForm
+from django.contrib.auth import login, update_session_auth_hash, authenticate
 from django.contrib.auth import logout
-from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
-from .models import User, UserRole, CustomerRank, Address
+from .models import User, UserRole
 from .decorators import role_required
 from cart.models import Cart
 
@@ -37,16 +33,34 @@ def accountRegister(request):
     return render(request, 'register.html', context)
 
 
-class UserLoginView(LoginView):
-    template_name = 'login.html'  # Your login template
-    redirect_authenticated_user = True  # Redirect authenticated users to another page
-    # You can also override the form_class attribute to use a custom login form
-    # form_class = UserLoginForm
-    # Or override the authentication_form attribute to use a custom authentication form
-    authentication_form = UserLoginForm
+# class UserLoginView(LoginView):
+#     template_name = 'login.html'  # Your login template
+#     redirect_authenticated_user = True  # Redirect authenticated users to another page
+#     # You can also override the form_class attribute to use a custom login form
+#     # form_class = UserLoginForm
+#     # # Or override the authentication_form attribute to use a custom authentication form
+#     authentication_form = UserLoginForm
+#
+#     def get_success_url(self):
+#         return reverse_lazy('home')  # Redirect to your desired page after login
 
-    def get_success_url(self):
-        return reverse_lazy('home')  # Redirect to your desired page after login
+
+def log_in(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == 'POST':
+        username_input = request.POST['username']
+        password_input = request.POST['password']
+        user = authenticate(request, username=username_input, password=password_input)
+
+        if user is not None:
+            login(request, user)  # Log in the user
+            return redirect('home')  # Redirect to your desired page after login
+    else:
+        username_input = ''
+
+    return render(request, 'login.html', {'username': username_input})
 
 
 @login_required
@@ -130,4 +144,3 @@ def view_customer_profile(request, customer):
 @role_required([UserRole.DELIVERER])
 def view_deliverer_profile(request, deliverer):
     return render(request, 'deliverer_profile.html', {'deliverer': deliverer})
-

@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Address
 
 
@@ -11,8 +10,11 @@ class UserRegistrationForm(forms.ModelForm):
         fields = ['phone_number', 'email', 'password', 'first_name', 'last_name']
 
 
-class UserLoginForm(AuthenticationForm):
-    username = forms.CharField(label="Phone number")
+# class UserLoginForm(AdminAuthenticationForm):
+#     username = forms.CharField(
+#         max_length=150,
+#         widget=forms.TextInput(attrs={'maxlength': 150}),
+#     )
 
 
 class ChangePasswordForm(forms.Form):
