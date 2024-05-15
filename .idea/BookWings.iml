@@ -32,6 +32,7 @@
         <option value="$MODULE_DIR$/books/templates" />
         <option value="$MODULE_DIR$/accounts/templates" />
         <option value="$MODULE_DIR$/coupons/templates" />
+        <option value="$MODULE_DIR$/delivery/templates" />
       </list>
     </option>
   </component>

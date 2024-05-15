@@ -20,7 +20,7 @@ class DeliveryStatus(models.TextChoices):
     PREPARING = 'PREPARING', 'Preparing'
     IN_TRANSIT = 'IN_TRANSIT', 'In transit'
     ARRIVED = 'ARRIVED', 'Arrived'
-    ON_THE_WAY = 'ON_THE_WAY', 'On the way'
+    DELIVERING = 'DELIVERING', 'DELIVERING'
     DELIVERED = 'DELIVERED', 'Delivered'
 
 

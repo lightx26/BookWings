@@ -23,7 +23,7 @@ def check_rank_up(customer):
 
     total_spent = 0
     for order in orders:
-        if order.deliveryinformation.status == 'COMPLETED':
+        if order.deliveryinformation.status == 'DELIVERED':
             total_spent += order.total
 
     for rank in range(CustomerRank.DIAMOND, customer.rank, -1):

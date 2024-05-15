@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Arrived shipments</title>
+</head>
+<body>
+    {% for shipment in shipments %}
+        <p>{{ shipment }}</p>
+        <form action="{% url 'take_shipment' shipment.id %}">
+            <input type="submit" value="Take this order">
+        </form>
+    {% endfor %}
+</body>
+</html>

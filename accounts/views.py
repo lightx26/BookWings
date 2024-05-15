@@ -7,6 +7,8 @@ from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
+from .models import User, UserRole, CustomerRank, Address
+from .decorators import role_required
 from cart.models import Cart
 
 import accounts.services as accounts_services
@@ -105,7 +107,27 @@ def remove_address(request):
     return render(request, 'remove_address.html', {'addresses': addresses})
 
 
-# TODO: View profile
+@login_required
+def view_addresses(request):
+    addresses = accounts_services.get_addresses_by_user(request.user)
+    return render(request, 'view_address.html', {'addresses': addresses})
+
+
 @login_required
 def view_profile(request):
-    return render(request, 'profile.html')
+    user = User(request.user)
+    if user.role == 'customer':
+        return view_customer_profile(request, user)
+    elif user.role == 'deliverer':
+        return view_deliverer_profile(request, user)
+
+
+@role_required([UserRole.CUSTOMER])
+def view_customer_profile(request, customer):
+    return render(request, 'customer_profile.html', {'customer': customer})
+
+
+@role_required([UserRole.DELIVERER])
+def view_deliverer_profile(request, deliverer):
+    return render(request, 'deliverer_profile.html', {'deliverer': deliverer})
+
