@@ -6,6 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div id="login_error"></div>
                 <form name="login_form" id="login_form" method="post" action="{% url 'login' %}">
                     {% csrf_token %}
                     <div class="form-group">
@@ -25,6 +26,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
     $(document).ready(function() {
@@ -48,12 +50,14 @@
                         if (data == 'success') {
                             window.location.href = "{% url 'home' %}";
                         } else {
-                            alert('Invalid credentials');
+                            $('#login_error').html('Invalid credentials');
+                            $('#login_error').addClass('alert alert-danger');
                         }
                     },
 
                     error: function(request, status, error) {
-                        alert("Error: " + error )
+                        $('#login_error').html("Error: " + error);
+                        $('#login_error').addClass('alert alert-danger');
                     }
                 });
             }
