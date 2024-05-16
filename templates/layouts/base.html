@@ -49,8 +49,12 @@
                                     <i class="bi bi-person-fill"></i>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    {% if user.is_staff %}
+                                        <li><a class="dropdown-item" href="/admin" target="_blank">Trang quản trị viên</a></li>
+                                    {% endif %}
+
+                                    <li><a class="dropdown-item" href="#!">Quản lý thông tin cá nhân</a></li>
                                     <li><a class="dropdown-item" href="#!">Quản lý đơn hàng đã đặt</a></li>
-                                    <li><a class="dropdown-item" href="#!">Xem thông tin</a></li>
                                     <li><a class="dropdown-item" href="/logout">Logout</a></li>
                                 </ul>
                             </div>
