@@ -5,3 +5,4 @@ mysqlclient
 Pillow
 python-dotenv
 unidecode
+python-dateutil
