@@ -5,8 +5,8 @@
                 <h5 class="modal-title" id="registerModalLabel">Register</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form method="post">
+            <div class="modal-body" id="register-model">
+                {% comment %} <form method="post">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="id_phone_number">Phone Number</label>
@@ -29,12 +29,73 @@
                         {{ form.last_name }}
                     </div>
                     <button type="submit" class="btn btn-primary">Register</button>
-                </form>
+                </form> {% endcomment %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Register</button>
+                <button type="button" class="btn btn-primary" id="register-btn">Register</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // load register page
+        $("#register-model").load("{% url 'register' %}", function() {
+            $("#register-model input").addClass("form-control");
+            $("#register-model label").addClass("form-label");
+        });
+
+        
+
+        $("#register-btn").click(function() {
+            var form = $("#register-form").serialize();
+            
+            if ($("#id_phone_number").val() == '' || $("#id_email").val() == '' || $("#id_password").val() == '' || $("#id_first_name").val() == '' || $("#id_last_name").val() == '') {
+                $("#register-error").html("Please fill in all fields");
+                $("#register-error").addClass("alert alert-danger");
+                return;
+            }
+
+            $.post("{% url 'register' %}", form, function(data) {
+                if (data.status == 'success') {
+                    $("#register-error").html(data.message);
+                    $("#register-error").removeClass("alert alert-danger");
+                    $("#register-error").addClass("alert alert-success");
+                    setTimeout(function() {
+                        $("#registerModal").modal('hide');
+                        $("#register-error").html("");
+                        $("#register-error").removeClass("alert alert-success");
+                        // =========================
+                        var id_phone_number = $("#id_phone_number").val();
+                        var password = $("#id_password").val();
+                        // =========================
+
+                        $("#register-form").trigger("reset");
+                        $("#login-form").trigger("reset");
+                        $("#login-error").html("");
+                        $("#login-error").removeClass("alert alert-danger");
+                        $("#loginModal").modal("show");
+                        // find login_form and fill in the values
+                        $("#txtUsername").val(id_phone_number);
+                        $("#txtPassword").val(password);
+                    }, 1000);
+
+                } else {
+                    var errors = data.errors;
+                    // convert this to json
+                    errors = JSON.parse(errors);
+                    key = Object.keys(errors)[0]
+                    var error = errors[key];
+                    if (error[0].message == "This field is required.") {
+                        $("#register-error").html(key + " " + error[0].message);
+                    } else {
+                        $("#register-error").html(error[0].message);
+                    }
+                    $("#register-error").addClass("alert alert-danger");
+                }
+            });
+        });
+    });
+</script>

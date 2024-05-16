@@ -18,17 +18,27 @@ def accountRegister(request):
         return redirect('home')
 
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)  # Use form if available
-        if form.is_valid():
-            user = form.save(commit=False)  # Don't save just yet
-            user.set_password(form.cleaned_data['password'])  # Set password securely
-            user.save()
+        try:
+            form = UserRegistrationForm(request.POST)  # Use form if available
+            if form.is_valid():
+                check_user = User.objects.filter(email=form.cleaned_data['email'], phone_number=form.cleaned_data['phone_number']).first()
+                if check_user:
+                    return JsonResponse({'status': "error",'message': 'User already exists'})
+                
+                user = form.save(commit=False)  # Don't save just yet
+                user.set_password(form.cleaned_data['password'])  # Set password securely
+                user.save()
 
-            cart = Cart(customer=user)
-            cart.save()
+                cart = Cart(customer=user)
+                cart.save()
 
-            login(request, user)  # Log in the newly registered user
-            return redirect('home')  # Redirect to your desired page after registration
+                # login(request, user)  # Log in the newly registered user
+                return JsonResponse({'status': "success",'message': 'Registration successful. Please login to continue.'})
+            else:
+                return JsonResponse({'status': "error",'errors': form.errors.as_json()})
+        except Exception as e:
+            e.with_traceback()
+            return JsonResponse({'status': "error",'message': 'Registration failed'})
     else:
         form = UserRegistrationForm()  # Create an empty form for GET requests
     context = {'form': form}
