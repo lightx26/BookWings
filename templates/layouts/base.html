@@ -58,11 +58,13 @@
                                     <li><a class="dropdown-item" href="/logout">Logout</a></li>
                                 </ul>
                             </div>
-                            <button class="btn btn-outline-dark" type="submit">
+
+                            <a class="btn btn-outline-dark"  data-bs-toggle="modal" data-bs-target="#cartModal">
                                 <i class="bi-cart-fill me-1"></i>
                                 Cart
-                                <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                            </button>
+                                <span id="cart-count" class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                            </a>
+                            {%include "user/cart.html"%}
                             
                         {% else %}
                             <button class="btn btn-outline-dark me-2" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
