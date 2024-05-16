@@ -1,4 +1,5 @@
 from books.models import Book, Category
+import orders.services as orders_services
 
 
 def get_all_books():
@@ -18,6 +19,20 @@ def get_books_by_filter(input_title="", category=None):
     if category is not None:
         books = books.filter(tags=category)
     return books
+
+
+def get_trendy_books():
+    tmp_orders = orders_services.get_recent_order_by_time(delta_month=3)    # Get orders in the last 3 months
+    book_sold = {}
+    for order in tmp_orders:
+        for book_in_order in order.bookinorder_set.all():
+            if book_in_order.book in book_sold:
+                book_sold[book_in_order.book.id] += book_in_order.quantity
+            else:
+                book_sold[book_in_order.book.id] = book_in_order.quantity
+
+    trendy_book_ids = sorted(book_sold.items(), key=lambda x: -x[1])[:10]    # Top 10 best-selling books
+    return Book.objects.filter(pk__in=[book_id for book_id, _ in trendy_book_ids])
 
 
 def get_all_categories():
