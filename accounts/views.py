@@ -9,6 +9,8 @@ from cart.models import Cart
 
 import accounts.services as accounts_services
 
+from django.http import JsonResponse
+
 
 # Create your views here.
 def accountRegister(request):
@@ -56,12 +58,13 @@ def log_in(request):
 
         if user is not None:
             login(request, user)  # Log in the user
-            return redirect('home')  # Redirect to your desired page after login
+            # return redirect('home')  # Redirect to your desired page after login
+            return JsonResponse({'status': "success",'message': 'Login successful'})
     else:
         username_input = ''
 
-    return render(request, 'login.html', {'username': username_input})
-
+    # return render(request, 'login.html', {'username': username_input})
+    return JsonResponse({'status': "error",'message': 'Login failed'})
 
 @login_required
 def log_out(request):

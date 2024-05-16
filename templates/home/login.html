@@ -32,7 +32,8 @@
     $(document).ready(function() {
         $('#login').click(function() {
             if ($('#id_username').val() == '' || $('#id_password').val() == '') {
-                alert('Please fill in all fields');
+                $('#login_error').html("Please fill in all fields");
+                $('#login_error').addClass('alert alert-danger');
             } else {
 
                 $.ajaxSetup({
@@ -47,10 +48,10 @@
                         'password': $('#id_password').val()
                     },
                     success: function(data) {
-                        if (data == 'success') {
+                        if (data.status == 'success') {
                             window.location.href = "{% url 'home' %}";
                         } else {
-                            $('#login_error').html('Invalid credentials');
+                            $('#login_error').html(data.message);
                             $('#login_error').addClass('alert alert-danger');
                         }
                     },
