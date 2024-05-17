@@ -4,6 +4,7 @@ from django.core import serializers
 from books.models import Book
 import books.services as books_services
 
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -48,6 +49,22 @@ def view_books_by_filter(request):
                       'category_id': category_id,
                   })
 
+def view_books_by_category(request):
+    input_title = request.GET.get('search', '').strip()
+    category_id = int(request.GET.get('category', 0))
+    category = books_services.get_category_by_id(category_id)
+    
+    books = books_services.get_books_by_filter(input_title, category)
+    categories = books_services.get_all_categories()
+
+    paginator = Paginator(books, 15)
+    page = request.GET.get('page', 1)
+    
+    return JsonResponse({
+        'books': serializers.serialize("json", paginator.page(page)),
+        'categories': serializers.serialize("json", categories),
+        'category_id': category
+    })
 
 def view_book_details(request, book_id, book_slug):
     book = books_services.get_book_by_id(book_id)
