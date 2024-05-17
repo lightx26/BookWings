@@ -92,7 +92,14 @@ def change_password(request):
                 user.set_password(form.cleaned_data['new_password'])
                 user.save()  # Save the new password to database
                 update_session_auth_hash(request, user)  # Prevent user from being logged out
-                return redirect('home')
+                # return redirect('home')
+                
+                return JsonResponse({'status': "success",'message': 'Password changed successfully'})
+            
+            else:
+                return JsonResponse({'status': "error",'message': 'Old password is incorrect'})
+        else:
+            return JsonResponse({'status': "error",'errors': form.errors.as_json()})
     else:
         form = ChangePasswordForm()
 
@@ -142,11 +149,12 @@ def view_addresses(request):
 
 @login_required
 def view_profile(request):
-    user = User(request.user)
-    if user.role == 'customer':
-        return view_customer_profile(request, user)
-    elif user.role == 'deliverer':
-        return view_deliverer_profile(request, user)
+    user = request.user
+    return render(request, 'user/view-profile.html', {'user': user})
+    # if user.role == 'customer':
+    #     return view_customer_profile(request, user)
+    # elif user.role == 'deliverer':
+    #     return view_deliverer_profile(request, user)
 
 
 @role_required([UserRole.CUSTOMER])
