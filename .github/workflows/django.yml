@@ -16,7 +16,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8
         ports:
           - 3306:3306
         env:
@@ -61,9 +61,12 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y default-libmysqlclient-dev
+    - name: Check MySQL Version
+      run: |
+        mysql -h 127.0.0.1 -u user -ppassword -e "SELECT @@version;"
     - name: Run Migrations
       env:
-        DB_HOST: 127.0.0.1  # Ensure env variables are passed to the command
+        DB_HOST: 127.0.0.1
         DB_NAME: bookwings
         DB_USER: user
         DB_PASSWORD: password
@@ -71,7 +74,7 @@ jobs:
         python manage.py migrate
     - name: Run Tests
       env:
-        DB_HOST: 127.0.0.1  # Ensure env variables are passed to the command
+        DB_HOST: 127.0.0.1
         DB_NAME: bookwings
         DB_USER: user
         DB_PASSWORD: password
