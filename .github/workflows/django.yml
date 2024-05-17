@@ -47,14 +47,15 @@ jobs:
         echo "SECRET_KEY=your_secret_key_here" >> .env
         echo "DB_ENGINE=django.db.backends.mysql" >> .env
         echo "DB_NAME=bookwings" >> .env
-        echo "DB_USER=root" >> .env
-        echo "DB_PASSWORD=root" >> .env
+        echo "DB_USER=user" >> .env
+        echo "DB_PASSWORD=password" >> .env
         echo "DB_HOST=127.0.0.1" >> .env
         echo "DB_PORT=3306" >> .env
         echo "ALLOWED_HOSTS=localhost,127.0.0.1" >> .env
     - name: Set up MySQL
       run: |
-        sudo apt-get install -y python3-mysqldb && sudo apt-get install python3-dev default-libmysqlclient-dev build-essential
+        sudo apt-get update
+        sudo apt-get install -y default-libmysqlclient-dev
     - name: Run Migrations
       run: |
         python manage.py migrate
@@ -82,8 +83,8 @@ jobs:
         echo "SECRET_KEY=your_secret_key_here" >> .env
         echo "DB_ENGINE=django.db.backends.mysql" >> .env
         echo "DB_NAME=bookwings" >> .env
-        echo "DB_USER=root" >> .env
-        echo "DB_PASSWORD=root" >> .env
+        echo "DB_USER=user" >> .env
+        echo "DB_PASSWORD=password" >> .env
         echo "DB_HOST=127.0.0.1" >> .env
         echo "DB_PORT=3306" >> .env
         echo "ALLOWED_HOSTS=localhost,127.0.0.1" >> .env
