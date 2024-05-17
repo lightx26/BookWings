@@ -108,6 +108,5 @@ jobs:
         echo "ALLOWED_HOSTS=localhost,127.0.0.1" >> .env
     - name: Deploy to Production
       run: |
-        # Add your deployment commands here
         echo "Deploying to production"
         python manage.py test
