@@ -21,7 +21,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: test_db
+          MYSQL_DATABASE: bookwings
           MYSQL_USER: user
           MYSQL_PASSWORD: password
         options: >-
@@ -46,19 +46,35 @@ jobs:
         echo "DEBUG=True" > .env
         echo "SECRET_KEY=your_secret_key_here" >> .env
         echo "DB_ENGINE=django.db.backends.mysql" >> .env
-        echo "DB_NAME=test_db" >> .env
+        echo "DB_NAME=bookwings" >> .env
         echo "DB_USER=user" >> .env
         echo "DB_PASSWORD=password" >> .env
         echo "DB_HOST=127.0.0.1" >> .env
         echo "DB_PORT=3306" >> .env
         echo "ALLOWED_HOSTS=localhost,127.0.0.1" >> .env
+    - name: Wait for MySQL to be ready
+      run: |
+        while ! mysqladmin ping -h"127.0.0.1" --silent; do
+          sleep 1
+        done
     - name: Set up MySQL
       run: |
+        sudo apt-get update
         sudo apt-get install -y default-libmysqlclient-dev
     - name: Run Migrations
+      env:
+        DB_HOST: 127.0.0.1  # Ensure env variables are passed to the command
+        DB_NAME: bookwings
+        DB_USER: user
+        DB_PASSWORD: password
       run: |
         python manage.py migrate
     - name: Run Tests
+      env:
+        DB_HOST: 127.0.0.1  # Ensure env variables are passed to the command
+        DB_NAME: bookwings
+        DB_USER: user
+        DB_PASSWORD: password
       run: |
         python manage.py test
 
@@ -81,7 +97,7 @@ jobs:
         echo "DEBUG=True" > .env
         echo "SECRET_KEY=your_secret_key_here" >> .env
         echo "DB_ENGINE=django.db.backends.mysql" >> .env
-        echo "DB_NAME=test_db" >> .env
+        echo "DB_NAME=bookwings" >> .env
         echo "DB_USER=user" >> .env
         echo "DB_PASSWORD=password" >> .env
         echo "DB_HOST=127.0.0.1" >> .env
@@ -91,3 +107,4 @@ jobs:
       run: |
         # Add your deployment commands here
         echo "Deploying to production"
+        python manage.py test
