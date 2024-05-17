@@ -49,9 +49,14 @@ jobs:
         echo "DB_NAME=bookwings" >> .env
         echo "DB_USER=user" >> .env
         echo "DB_PASSWORD=password" >> .env
-        echo "DB_HOST=127.0.0.1" >> .env
+        echo "DB_HOST=127.0.0.1" >> .env  # Ensure the host is 127.0.0.1 to use TCP/IP
         echo "DB_PORT=3306" >> .env
         echo "ALLOWED_HOSTS=localhost,127.0.0.1" >> .env
+    - name: Wait for MySQL to be ready
+      run: |
+        while ! mysqladmin ping -h"127.0.0.1" --silent; do
+          sleep 1
+        done
     - name: Set up MySQL
       run: |
         sudo apt-get update
@@ -85,7 +90,7 @@ jobs:
         echo "DB_NAME=bookwings" >> .env
         echo "DB_USER=user" >> .env
         echo "DB_PASSWORD=password" >> .env
-        echo "DB_HOST=127.0.0.1" >> .env
+        echo "DB_HOST=127.0.0.1" >> .env  # Ensure the host is 127.0.0.1 to use TCP/IP
         echo "DB_PORT=3306" >> .env
         echo "ALLOWED_HOSTS=localhost,127.0.0.1" >> .env
     - name: Deploy to Production
