@@ -1,5 +1,5 @@
 # Xây dựng trang web bán sách
-Description Here
+Trang web này được xây dựng để bán sách trực tuyến. Bạn có thể tìm thấy các cuốn sách từ nhiều tác giả khác nhau. Hãy khám phá và tìm kiếm những cuốn sách mà bạn quan tâm.
 
 Tác giả:
 - Nguyễn An Hưng
