@@ -93,13 +93,14 @@ def make_order(request):
 
     addresses = accounts_services.get_addresses_by_user(request.user)
     shipping_companies = order_services.get_all_shipping_companies()
-    coupons = coupon_services.get_coupon_for_order(request.user, prepared_order.get('total'))
+    o_coupons, d_coupons = coupon_services.get_coupon_for_order(request.user, prepared_order.get('total'))
 
     return render(request, 'make_order.html',
                   {'prepared_order': prepared_order,
                    'addresses': addresses,
                    'shipping_companies': shipping_companies,
-                   'coupons': coupons})
+                   'order_coupons': o_coupons,
+                   'delivery_coupons': d_coupons,})
 
 # @login_required
 # def payment(request, order_id):
