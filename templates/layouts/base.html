@@ -50,12 +50,12 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                     {% if user.is_staff %}
-                                        <li><a class="dropdown-item" href="/admin" target="_blank">Trang quản trị viên</a></li>
+                                        <li><a class="dropdown-item" href="/admin" target="_blank">Administrator page</a></li>
                                     {% endif %}
 
-                                    <li><a class="dropdown-item" href="/accounts/profile">Thông tin cá nhân</a></li>
-                                    <li><a class="dropdown-item" href="#!">Lịch sử đặt đơn hàng</a></li>
-                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    <li><a class="dropdown-item" href="/accounts/profile">Personal Information</a></li>
+                                    <li><a class="dropdown-item" href="#!">Order History</a></li>
+                                    <li><a class="dropdown-item fw-semibold text-danger" href="/logout"><i class="bi bi-box-arrow-right"></i>&nbsp; Sign out</a></li>
                                 </ul>
                             </div>
 

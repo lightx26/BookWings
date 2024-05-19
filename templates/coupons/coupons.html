@@ -1,0 +1,17 @@
+{% load static %}
+<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" id="books">
+    {% for coupon in coupons %}
+        <div class="col mb-5">
+            <div class="card border-danger">
+                <div class="card-body">
+                    {% if coupon.type == 'PERCENTAGE' %}
+                        <h5 class="card-title text-danger text-bolder">SAVE {{ coupon.discount | floatformat }}%</h5>
+                    {% elif coupon.type == 'FIXED' %}
+                        <h5 class="card-title text-danger text-bolder">SAVE {{ coupon.discount }} ₫</h5>
+                    {% endif %}
+                    <p class="card-text">Use code: <strong>{{ coupon.code }}</strong></p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -19,12 +19,13 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import index, about
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='home/index.html'), name='home'),
-    path('home/', TemplateView.as_view(template_name='home/index.html'), name='home'),
-    path('about/', TemplateView.as_view(template_name='home/about.html'), name='about'),
+    path('', index, name='home'),
+    path('home/', index, name='home'),
+    path('about/', about, name='about'),
     path('', include('accounts.urls')),
     path('books/', include('books.urls')),
     path('cart/', include('cart.urls')),

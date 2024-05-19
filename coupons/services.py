@@ -24,6 +24,11 @@ def get_coupon_for_customer(customer):
 #     return filter_valid_coupons(hot_coupons)
 
 
+def get_new_coupons():
+    new_coupons = Coupon.objects.all().order_by('-id')
+    return filter_valid_coupons(new_coupons)[:10]
+
+
 def filter_valid_coupons(coupons):
     valid_coupons = []
     for coupon in coupons.filter(expiration_date__gte=datetime.now()):
