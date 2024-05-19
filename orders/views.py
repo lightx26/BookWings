@@ -110,3 +110,8 @@ def make_order(request):
 #         order.save()
 #         return redirect('home')
 #     return render(request, 'payment.html', {'order': order})
+
+
+def view_orders(request):
+    orders = order_services.get_orders_by_customer(request.user)
+    return render(request, 'orders/orders.html', {'orders': orders})

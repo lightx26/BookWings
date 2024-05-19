@@ -21,10 +21,11 @@ def accountRegister(request):
         try:
             form = UserRegistrationForm(request.POST)  # Use form if available
             if form.is_valid():
-                check_user = User.objects.filter(email=form.cleaned_data['email'], phone_number=form.cleaned_data['phone_number']).first()
+                check_user = User.objects.filter(email=form.cleaned_data['email'],
+                                                 phone_number=form.cleaned_data['phone_number']).first()
                 if check_user:
-                    return JsonResponse({'status': "error",'message': 'User already exists'})
-                
+                    return JsonResponse({'status': "error", 'message': 'User already exists'})
+
                 user = form.save(commit=False)  # Don't save just yet
                 user.set_password(form.cleaned_data['password'])  # Set password securely
                 user.save()
@@ -33,12 +34,13 @@ def accountRegister(request):
                 cart.save()
 
                 # login(request, user)  # Log in the newly registered user
-                return JsonResponse({'status': "success",'message': 'Registration successful. Please login to continue.'})
+                return JsonResponse(
+                    {'status': "success", 'message': 'Registration successful. Please login to continue.'})
             else:
-                return JsonResponse({'status': "error",'errors': form.errors.as_json()})
+                return JsonResponse({'status': "error", 'errors': form.errors.as_json()})
         except Exception as e:
             e.with_traceback()
-            return JsonResponse({'status': "error",'message': 'Registration failed'})
+            return JsonResponse({'status': "error", 'message': 'Registration failed'})
     else:
         form = UserRegistrationForm()  # Create an empty form for GET requests
     context = {'form': form}
@@ -69,12 +71,13 @@ def log_in(request):
         if user is not None:
             login(request, user)  # Log in the user
             # return redirect('home')  # Redirect to your desired page after login
-            return JsonResponse({'status': "success",'message': 'Login successful'})
+            return JsonResponse({'status': "success", 'message': 'Login successful'})
     else:
         username_input = ''
 
     # return render(request, 'login.html', {'username': username_input})
-    return JsonResponse({'status': "error",'message': 'Login failed'})
+    return JsonResponse({'status': "error", 'message': 'Login failed'})
+
 
 @login_required
 def log_out(request):
@@ -93,13 +96,13 @@ def change_password(request):
                 user.save()  # Save the new password to database
                 update_session_auth_hash(request, user)  # Prevent user from being logged out
                 # return redirect('home')
-                
-                return JsonResponse({'status': "success",'message': 'Password changed successfully'})
-            
+
+                return JsonResponse({'status': "success", 'message': 'Password changed successfully'})
+
             else:
-                return JsonResponse({'status': "error",'message': 'Old password is incorrect'})
+                return JsonResponse({'status': "error", 'message': 'Old password is incorrect'})
         else:
-            return JsonResponse({'status': "error",'errors': form.errors.as_json()})
+            return JsonResponse({'status': "error", 'errors': form.errors.as_json()})
     else:
         form = ChangePasswordForm()
 
@@ -113,29 +116,37 @@ def change_password(request):
 
 @login_required
 def update_address(request):
+    # if request.method == 'POST':
+    #     form = UserAddressForm(request.POST)
+    #     if form.is_valid():
+    #         address = form.save(commit=False)
+    #         address.user = request.user
+    #         address.save()
+    #         return redirect('home')
+    # else:
+    #     form = UserAddressForm()
+    #
+    # context = {'form': form}
+    address = {}
     if request.method == 'POST':
-        form = UserAddressForm(request.POST)
-        if form.is_valid():
-            address = form.save(commit=False)
-            address.user = request.user
-            address.save()
-            return redirect('home')
-    else:
-        form = UserAddressForm()
+        address['local_addr'] = request.POST.get('local_addr')
+        address['commune'] = request.POST.get('commune')
+        address['district'] = request.POST.get('district')
+        address['province'] = request.POST.get('province')
 
-    context = {'form': form}
-    return render(request, 'update_address.html', context)
+        if accounts_services.create_address(request.user, address) is None:
+            return JsonResponse({'status': "error", 'message': 'Failed to add address'})
+
+        return JsonResponse({'status': "success", 'message': 'Address added successfully'})
 
 
 @login_required
-def remove_address(request):
+def remove_address(request, addr_id):
     if request.method == 'POST':
-        address_ids = request.POST.getlist('addresses[]')
-        for address_id in address_ids:
-            address = accounts_services.get_address_by_id(address_id)
-            address.delete()
+        address = accounts_services.get_address_by_id(addr_id)
+        address.delete()
 
-        return redirect('home')
+        return redirect('/accounts/profile')
 
     addresses = accounts_services.get_addresses_by_user(request.user)
     return render(request, 'remove_address.html', {'addresses': addresses})
@@ -150,7 +161,9 @@ def view_addresses(request):
 @login_required
 def view_profile(request):
     user = request.user
-    return render(request, 'user/view-profile.html', {'user': user})
+    address = user.address_set.all()
+    print(address.count())
+    return render(request, 'user/view-profile.html', {'user': user, 'addresses': address})
     # if user.role == 'customer':
     #     return view_customer_profile(request, user)
     # elif user.role == 'deliverer':

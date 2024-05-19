@@ -3,6 +3,10 @@
     {% for book in books %}
         <div class="col mb-5">
             <div class="card h-100">
+                {% if is_trending == True %}
+                    <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Hot
+                    </div>
+                {% endif %}
                 <div style="text-align: center;">
                     <img class="card-img-top" src="{% get_media_prefix %}{{ book.cover }}" alt="..."
                          style="width: 200px; height: 300px; "/>
@@ -10,13 +14,23 @@
                 <div class="card-body p-4">
                     <div class="text-center">
                         <h5 class="fw-bolder">{{ book.title }} - {{ book.author }}</h5>
-                        <div class="d-flex justify-content-center small text-warning mb-2">
-                            <div class="bi-star-fill"></div>
-                            <div class="bi-star-fill"></div>
-                            <div class="bi-star-fill"></div>
-                            <div class="bi-star-fill"></div>
-                        </div>
-                        {{ book.price | floatformat }} ₫
+                        {% if is_trending == True %}
+                            <div class="d-flex justify-content-center small text-warning mb-2">
+                                <div class="bi-star-fill"></div>
+                                <div class="bi-star-fill"></div>
+                                <div class="bi-star-fill"></div>
+                                <div class="bi-star-fill"></div>
+                                <div class="bi-star-fill"></div>
+                            </div>
+                        {% endif %}
+                        <div class="price mb-2">{{ book.price | floatformat }} ₫</div>
+                        {% if is_trending != True %}
+                            <div class="justify-content-start">
+                                {% for tag in book.tags.all %}
+                                    <span class="badge text-bg-dark">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">

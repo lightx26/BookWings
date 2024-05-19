@@ -9,5 +9,5 @@ urlpatterns = [
     path('accounts/change-password/', change_password, name='change-password'),
     path('accounts/address', view_addresses, name='address'),
     path('accounts/update-address/', update_address, name='update-address'),
-    path('accounts/remove-address/', remove_address, name='remove-address'),
+    path('accounts/remove-address/<int:addr_id>', remove_address, name='remove-address'),
 ]

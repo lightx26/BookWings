@@ -9,7 +9,10 @@
                     {% elif coupon.type == 'FIXED' %}
                         <h5 class="card-title text-danger text-bolder">SAVE {{ coupon.discount }} ₫</h5>
                     {% endif %}
-                    <p class="card-text">Use code: <strong>{{ coupon.code }}</strong></p>
+                    <div>
+                        <span class="card-text">Use code: <strong>{{ coupon.code }}</strong></span>
+                    </div>
+                    <span class="card-text" style="font-style: italic">Valid until {{ coupon.expiration_date }}</span>
                 </div>
             </div>
         </div>

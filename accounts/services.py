@@ -40,6 +40,7 @@ def rank_up(customer):
     customer.save()
     return customer.rank
 
+
 # def rank_up(customer):
 #     if customer.rank < CustomerRank.DIAMOND:
 #         customer.rank += 1
@@ -52,3 +53,11 @@ def rank_up(customer):
 #         customer.rank -= 1
 #     customer.save()
 #     return customer.rank
+
+def create_address(user, address):
+    address = Address.objects.create(local_address=address['local_addr'],
+                                     commune=address['commune'],
+                                     district=address['district'],
+                                     province=address['province'],
+                                     user=user)
+    return address
