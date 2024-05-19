@@ -54,7 +54,13 @@
                                     {% endif %}
 
                                     <li><a class="dropdown-item" href="{% url 'profile' %}">Personal Information</a></li>
-                                    <li><a class="dropdown-item" href="#!">Order History</a></li>
+
+                                    {% if user.is_deliverer %}
+                                        <li><a class="dropdown-item" href="#!">Deliverer page</a></li>
+                                    {% else %}
+                                        <li><a class="dropdown-item" href="#!">Order History</a></li>
+                                    {% endif %}
+
                                     <li><a class="dropdown-item fw-semibold text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i>&nbsp; Sign out</a></li>
                                 </ul>
                             </div>

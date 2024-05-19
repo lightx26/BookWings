@@ -74,6 +74,13 @@ class User(AbstractBaseUser):
     @property
     def is_admin(self):
         return self.role == UserRole.ADMIN
+    
+    @property
+    def is_customer(self):
+        return self.role == UserRole.CUSTOMER
+    @property
+    def is_deliverer(self):
+        return self.role == UserRole.DELIVERER
 
     @property
     def is_staff(self):

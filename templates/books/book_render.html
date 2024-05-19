@@ -37,10 +37,35 @@
                     <div class="text-center">
                         <a class="btn btn-outline-dark mt-auto" href="{% url 'view_book_details' book.id book.slug %}">View
                             Book</a>
-                        <a class="btn btn-outline-dark mt-auto" href="{% url 'add_to_cart' book.id %}">Add to cart</a>
+                        <a class="btn btn-outline-dark mt-auto add-to-cart" href="#" value="{{book.id}}">Add to cart</a>
                     </div>
                 </div>
             </div>
         </div>
     {% endfor %}
 </div>
+
+<script>
+$(document).ready(function () {
+    $(".add-to-cart").click(function (e) {
+        e.preventDefault();
+        var book_id = $(this).attr('value');
+        $.ajax({
+            url: "{% url 'add_to_cart' %}",
+            type: 'POST',
+            data: {
+                'book_id': book_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function (data) {
+                if (data['status'] == 'success') {
+                    alert('Book added to cart!');
+                    update_cart_count();
+                } else {
+                    alert('Error adding book to cart!');
+                }
+            }
+        });
+    });
+});
+</script>

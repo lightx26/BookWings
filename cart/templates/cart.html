@@ -1,26 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>My cart</title>
-</head>
-<body>
-<form action="{% url 'prepare_order' %}" method="POST">
+<div id="cart-alert"></div>
+<form class="cart-form" action="{% url 'prepare_order' %}" method="POST" id="cart-form">
     {% csrf_token %}
     {% for book in books %}
-        <div>
-            <p>Title: {{ book.book.title }}</p>
-            <p>Price: {{ book.book.price }}</p>
-            <label>
-                <input type="number" name="quantities[]" value="{{ book.quantity }}">
-            </label>
+        <div class="row">
+            <div class="col-2">
+                <img src="/media/{{book.book.cover}}" alt="{{ book.book.title }}" class="img-fluid">
+            </div>
+            <div class="col-3">{{ book.book.title }}</div>
+            <div class="col-3 book_price" id="book_price">{{ book.book.price }}</div>
+            <div class="col-2">
+                <label>Quantity:</label>
+                <input type="number" name="quantities[]" value="{{ book.quantity }}" min="1" max="999">
+            </div>
+            <div class="col-1">
+                <a class="btn btn-outline-danger btn-sm"  href="javascript:void(0)" id="{{ book.book.id }}">Remove</a>
+                <label>
+                <input type="checkbox" name="books[]" value="{{ book.book.id }}">
+                </label>
+            </div>
         </div>
-        <label>
-            <input type="checkbox" name="books[]" value="{{ book.book.id }}">
-        </label>
+        {% if not forloop.last %}<hr>{% endif %}
     {% endfor %}
-    <br>
-    <button type="submit">Purchase</button>
 </form>
-</body>
-</html>
