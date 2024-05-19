@@ -169,10 +169,10 @@ def view_profile(request):
 
 
 @role_required([UserRole.CUSTOMER])
-def view_customer_profile(request, customer):
-    return render(request, 'customer_profile.html', {'customer': customer})
+def view_customer_profile(request, customer, addresses):
+    return render(request, 'user/customer-profile.html', {'user': customer, 'addresses': addresses})
 
 
 @role_required([UserRole.DELIVERER])
 def view_deliverer_profile(request, deliverer):
-    return render(request, 'deliverer_profile.html', {'deliverer': deliverer})
+    return render(request, 'user/deliverer-profile.html', {'deliverer': deliverer})
