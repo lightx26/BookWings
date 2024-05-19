@@ -32,6 +32,12 @@ class Cart(models.Model):
                 book_in_cart.delete()
             else:
                 book_in_cart.save()
+                
+    def update_quantity(self, book_id, quantity):
+        book = Book.objects.get(pk=book_id)
+        book_in_cart = BookInCart.objects.get(cart=self, book=book)
+        book_in_cart.quantity = int(quantity)
+        book_in_cart.save()
 
     def total(self):
         total = 0

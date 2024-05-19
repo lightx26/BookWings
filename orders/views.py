@@ -13,7 +13,6 @@ import accounts.services as accounts_services
 import books.services as books_services
 import cart.services as cart_services
 
-
 # Create your views here.
 @login_required
 def prepare_order(request):
@@ -31,6 +30,7 @@ def prepare_order(request):
             'quantities': quantities,
             'total': float(tmp_total)
         }
+        
         return redirect('make_order')
     return redirect('view_cart')
 
