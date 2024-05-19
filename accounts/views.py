@@ -161,13 +161,11 @@ def view_addresses(request):
 @login_required
 def view_profile(request):
     user = request.user
-    address = user.address_set.all()
-    print(address.count())
-    return render(request, 'user/view-profile.html', {'user': user, 'addresses': address})
-    # if user.role == 'customer':
-    #     return view_customer_profile(request, user)
-    # elif user.role == 'deliverer':
-    #     return view_deliverer_profile(request, user)
+    if user.role == UserRole.CUSTOMER:
+        addresses = accounts_services.get_addresses_by_user(user)
+        return view_customer_profile(request, user, addresses)
+    elif user.role == UserRole.DELIVERER:
+        return view_deliverer_profile(request, user)
 
 
 @role_required([UserRole.CUSTOMER])
