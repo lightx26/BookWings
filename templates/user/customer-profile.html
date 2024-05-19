@@ -58,7 +58,8 @@
                                 {{ address }}
                                 <form method="post" action="{% url 'remove-address' address.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn"><i class="bi bi-dash-circle" style="color: red"></i></button>
+                                    <button type="submit" class="btn"><i class="bi bi-dash-circle"
+                                                                         style="color: red"></i></button>
                                 </form>
                             </div>
                         {% endfor %}
@@ -98,8 +99,8 @@
                     <h5 class="modal-title" id="addAddressModalLabel">Add New Address</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form method="post" action="{% url 'update-address' %}">
+                <form method="post" action="{% url 'update-address' %}">
+                    <div class="modal-body">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="id_address" class="form-label">No. and Street</label>
@@ -111,41 +112,19 @@
                             <label for="id_province" class="form-label">Province</label>
                             <input type="text" name="province" class="form-control mb-2" id="id_province" required>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-dark" id="id_add_addr">Add Address</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-dark" id="id_add_addr">Add Address</button>
+                    </div>
+                </form>
+                        
             </div>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
-
-            $('#id_add_addr').click(function () {
-                $.ajaxSetup({
-                    headers: {"X-CSRFToken": "{{ csrf_token }}"}
-                });
-
-                $.ajax({
-                    type: 'POST',
-                    url: "{% url 'update-address' %}",
-                    data: $('#addAddressModal form').serialize(),
-                    success: function (response) {
-                        if (response['status'] == 'success') {
-                            $("#addAddressModal").modal('hide');
-                            location.reload();
-                        } else {
-                            $("#addAddressModal").html('<div class="alert alert-danger" role="alert">' + response['error_message'] + '</div>');
-                        }
-                    },
-                    error: function (responseText, status, error) {
-                        $("#addAddressModal").html('<div class="alert alert-danger" role="alert">' + error + '</div>');
-                    }
-                });
-            });
 
             $('#changePasswordModal').on('show.bs.modal', function (event) {
                 var modal = $(this);

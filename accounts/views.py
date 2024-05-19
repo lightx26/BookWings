@@ -110,23 +110,8 @@ def change_password(request):
     return render(request, 'change_password.html', context)
 
 
-# def accountProfile(request):
-#     return render(request, 'profile.html')
-
-
 @login_required
 def update_address(request):
-    # if request.method == 'POST':
-    #     form = UserAddressForm(request.POST)
-    #     if form.is_valid():
-    #         address = form.save(commit=False)
-    #         address.user = request.user
-    #         address.save()
-    #         return redirect('home')
-    # else:
-    #     form = UserAddressForm()
-    #
-    # context = {'form': form}
     address = {}
     if request.method == 'POST':
         address['local_addr'] = request.POST.get('local_addr')
@@ -135,9 +120,9 @@ def update_address(request):
         address['province'] = request.POST.get('province')
 
         if accounts_services.create_address(request.user, address) is None:
-            return JsonResponse({'status': "error", 'message': 'Failed to add address'})
+            return redirect('profile', {'error': 'Cannot create address'})
 
-        return JsonResponse({'status': "success", 'message': 'Address added successfully'})
+    return redirect('profile')
 
 
 @login_required
@@ -146,10 +131,7 @@ def remove_address(request, addr_id):
         address = accounts_services.get_address_by_id(addr_id)
         address.delete()
 
-        return redirect('/accounts/profile')
-
-    addresses = accounts_services.get_addresses_by_user(request.user)
-    return render(request, 'remove_address.html', {'addresses': addresses})
+    return redirect('profile')
 
 
 @login_required

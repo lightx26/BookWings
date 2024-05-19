@@ -12,6 +12,7 @@ def add_to_cart(request, book_id):
     cart.add(book_id, 1)
     return HttpResponse("Book added to cart")
 
+
 @login_required
 def view_cart(request):
     cart = cart_services.get_cart(request.user)
