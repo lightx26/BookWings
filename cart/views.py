@@ -47,8 +47,8 @@ def update_quantity(request):
 def get_cart_size(request):
     cart = cart_services.get_cart(request.user)
     books_in_cart = BookInCart.objects.filter(cart=cart)
-    count = 0
-    for book in books_in_cart:
-        count += book.quantity
+    # count = 0
+    # for book in books_in_cart:
+    #     count += book.quantity
         
-    return HttpResponse(count)
+    return HttpResponse(len(books_in_cart))

@@ -22,6 +22,11 @@ class Order(models.Model):
                                                   shipping_company=shipping_company,
                                                   delivery_fee=delivery_fee,
                                                   status='PREPARING')
+        
+    @property
+    def delivery_info(self):
+        DeliveryInformation = import_string('delivery.models.DeliveryInformation')
+        return DeliveryInformation.objects.get(order=self).status
 
     def add_product(self, book, quantity):
         return BookInOrder.objects.create(order=self, book=book, quantity=quantity)
