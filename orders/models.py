@@ -30,6 +30,14 @@ class Order(models.Model):
             return DeliveryInformation.objects.get(order=self).status
         except DeliveryInformation.DoesNotExist:
             return None
+        
+    @property
+    def delivery_address(self):
+        try:
+            DeliveryInformation = import_string('delivery.models.DeliveryInformation')
+            return DeliveryInformation.objects.get(order=self).address
+        except DeliveryInformation.DoesNotExist:
+            return None
 
     def add_product(self, book, quantity):
         return BookInOrder.objects.create(order=self, book=book, quantity=quantity)

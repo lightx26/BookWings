@@ -1,11 +1,12 @@
-{% extends "layouts/base.html"%}
+{% extends "layouts/base.html" %}
 {% block title %} Orders {% endblock %}
 {% block content %}
-<!-- Header-->
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Orders History</h1>
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Orders History</h1>
+            </div>
         </div>
     </div>
 </header>
@@ -29,11 +30,49 @@
                     <td>{{ order.date_ordered | date:"H:i:s F d, Y"}}</td>
                     <td style="text-align: right;" >{{ order.total | floatformat }}₫</td>
                     <td style="text-align: right; color: {% if order.delivery_info == 'PENDING' %}orange{% elif order.delivery_info == 'DELIVERED' %}green{% else %}gray{% endif %}">{{ order.delivery_info }}</td>
-                    <td style="text-align: center;"><a class="btn"><i class="bi bi-eye"></i></a></td>
+                    <td style="text-align: center;" class="view-order-detail"><a class="btn"><i class="bi bi-eye"></i></a></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderDetailModalLabel">Order Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="order-detail-body">
+                    <!-- Order detail goes here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$(document).ready(function() {
+    $('.view-order-detail').click(function() {
+        var order_id = $(this).closest('tr').find('td').eq(0).text();
+        $.ajax({
+            url: "{% url 'view_orders' %}",
+            type: 'GET',
+            data: {
+                'order_id': order_id
+            },
+            success: function(data) {
+                $('#orderDetailModal').modal('show');
+                $('#orderDetailModalLabel').html('Order Detail - ' + order_id);
+                $('#order-detail-body').html(data);
+            }
+        });
+    });
+});
+</script>
 </section>
 {% endblock %}

@@ -5,7 +5,6 @@ import orders.services as orders_services
 def get_all_books():
     return Book.objects.all().order_by('-id')
 
-
 def get_book_by_id(book_id):
     return Book.objects.get(pk=book_id)
 

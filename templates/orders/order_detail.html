@@ -1,0 +1,31 @@
+{% for item in order_items %}
+<div class="product-row">
+    <div class="row">
+        <div class="col-2 text-left">
+            <img src="/media/{{ item.book.cover }}" alt="{{ item.book.title }}" class="img-fluid">
+        </div>
+        <div class="col-3 d-flex align-items-center justify-content-start text-left">{{ item.book.title }}</div>
+        <div class="col-3 d-flex align-items-center justify-content-start text-left">{{ item.quantity }}</div>
+        <div class="col-3 d-flex align-items-center justify-content-start text-left">{{ item.book.price|floatformat }} ₫</div>
+    </div>
+    <hr>
+</div>
+{% endfor %}
+
+<div class="row">
+    <div class="col-9 d-flex align-items-center justify-content-start text-left">
+        Total: {{ order.total|floatformat }} ₫
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-9 d-flex align-items-center justify-content-start text-left">
+        Delivery Info: {{ order.delivery_info }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-9 d-flex align-items-center justify-content-start text-left">
+        Delivery Address: {{ order.delivery_address }}
+    </div>
+</div>

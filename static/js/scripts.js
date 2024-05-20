@@ -5,3 +5,12 @@
 */
 // This file is intentionally blank
 // Use this file to add JavaScript to your project
+function getOrders() {
+    $.ajax({
+        url: '/orders/delivered',
+        type: 'GET',
+        success: function (response) {
+            $('.orders-section').html(response);
+        }
+    });
+}
