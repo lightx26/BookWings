@@ -1,40 +1,51 @@
-{% extends "layouts/base.html"%}
+{% extends "layouts/base.html" %}
 {% block title %} Orders {% endblock %}
 {% block content %}
-<!-- Header-->
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Orders History</h1>
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Orders History</h1>
+            </div>
         </div>
-    </div>
-</header>
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <h3>Orders by {{ user }}</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Order Date</th>
-                    <th>Order Total</th>
-                    <th>Status</th>
-                    <th>View</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                <tr>
-                    <td>{{ order.id }}</td>
-                    <td>{{ order.date_ordered | date:"H:i:s F d, Y"}}</td>
-                    <td>{{ order.total | floatformat }}₫</td>
-                    <td>{{ order.delivery_info }}</td>
-                    <td>{{ order.delivery_info }}</td>
-                    <td><a class="btn"><i class="bi bi-eye"></i></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</section>
+    </header>
+    <section class="py-5">
+        <div class="mb3 d-flex justify-content-center" role="group" aria-label="Filter orders">
+            <button class="btn btn-outline-dark active switch-btn" id="delivered" style="width: 200px">
+                Delivered
+            </button>
+            <button class="btn btn-outline-dark switch-btn" id="delivering" style="width: 200px">Delivering
+            </button>
+        </div>
+        <div class="orders-section">
+
+        </div>
+    </section>
+    <script>
+        document.getElementById('delivered').addEventListener('click', function () {
+            document.getElementById('delivering').classList.remove('active');
+            document.getElementById('delivered').classList.add('active');
+            $.ajax({
+                url: '{% url 'view_delivered_orders' %}',
+                type: 'GET',
+                success: function (response) {
+                    $('.orders-section').html(response);
+                }
+            });
+        })
+        
+        document.getElementById('delivered').click();
+
+        document.getElementById('delivering').addEventListener('click', function () {
+            document.getElementById('delivered').classList.remove('active');
+            document.getElementById('delivering').classList.add('active')
+            $.ajax({
+                url: '{% url 'view_delivering_orders' %}',
+                type: 'GET',
+                success: function (response) {
+                    $('.orders-section').html(response);
+                }
+            });
+        })
+    </script>
 {% endblock %}

@@ -1,4 +1,4 @@
-from delivery.models import Shipping
+from delivery.models import Shipping, DeliveryStatus
 from orders.models import Order
 from datetime import date
 from dateutil.relativedelta import relativedelta
@@ -16,8 +16,28 @@ def get_order_by_id(order_id):
     return Order.objects.get(pk=order_id)
 
 
-def get_orders_by_customer(customer):
+def get_orders_by_customer(customer, status=None):
+    if status:
+        return Order.objects.filter(customer=customer, status=status)
     return Order.objects.filter(customer=customer)
+
+
+def get_delivered_orders(customer):
+    orders = get_orders_by_customer(customer)
+    delivered_orders = []
+    for order in orders:
+        if order.deliveryinformation.status == DeliveryStatus.DELIVERED:
+            delivered_orders.append(order)
+    return delivered_orders
+
+
+def get_not_delivered_orders(customer):
+    orders = get_orders_by_customer(customer)
+    delivering_orders = []
+    for order in orders:
+        if order.deliveryinformation.status != DeliveryStatus.DELIVERED:
+            delivering_orders.append(order)
+    return delivering_orders
 
 
 def get_recent_orders(num_orders):

@@ -3,9 +3,10 @@ from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from accounts.decorators import role_required
 from accounts.models import Address
 from coupons.models import CouponType
-from delivery.models import Shipping
+from delivery.models import Shipping, DeliveryStatus
 
 import orders.services as order_services
 import coupons.services as coupon_services
@@ -112,6 +113,19 @@ def make_order(request):
 #     return render(request, 'payment.html', {'order': order})
 
 
+@role_required('CUSTOMER')
 def view_orders(request):
     orders = order_services.get_orders_by_customer(request.user)
     return render(request, 'orders/orders.html', {'orders': orders})
+
+
+@role_required('CUSTOMER')
+def view_delivered_orders(request):
+    orders = order_services.get_delivered_orders(request.user)
+    return render(request, 'orders/delivered.html', {'orders': orders})
+
+
+@role_required('CUSTOMER')
+def view_delivering_orders(request):
+    orders = order_services.get_not_delivered_orders(request.user)
+    return render(request, 'orders/delivering.html', {'orders': orders})
