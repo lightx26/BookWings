@@ -1,0 +1,24 @@
+<div id="cart-alert"></div>
+<form class="cart-form" action="{% url 'prepare_order' %}" method="POST" id="cart-form">
+    {% csrf_token %}
+    {% for book_ic in books_in_cart %}
+        <div class="row">
+            <div class="col-2">
+                <img src="/media/{{book_ic.book.cover}}" alt="{{ book_ic.book.title }}" class="img-fluid">
+            </div>
+            <div class="col-3">{{ book_ic.book.title }}</div>
+            <div class="col-3 book_price" id="book_price">{{ book_ic.book.price|floatformat }} ₫</div>
+            <div class="col-2">
+                <label>Quantity:</label>
+                <input type="number" name="quantities[]" value="{{ book_ic.quantity }}" min="1" max="999">
+            </div>
+            <div class="col-1">
+                <a class="btn btn-outline-danger btn-sm"  href="javascript:void(0)" id="{{ book_ic.book.id }}">Remove</a>
+                <label>
+                <input type="checkbox" name="books[]" value="{{ book_ic.book.id }}">
+                </label>
+            </div>
+        </div>
+        {% if not forloop.last %}<hr>{% endif %}
+    {% endfor %}
+</form>
