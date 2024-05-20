@@ -36,7 +36,7 @@ update_cart_count = ()=> {
 }
 
 $(document).ready(function() {
-    {#update_cart_count();#}
+    update_cart_count();
 
     $('#cartModal').on('show.bs.modal', async function(event) {
         var button = $(event.relatedTarget);
@@ -82,7 +82,7 @@ $(document).ready(function() {
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 success: function(response) {
-                    {#update_cart_count();#}
+                    update_cart_count();
                 }
             });
         });
