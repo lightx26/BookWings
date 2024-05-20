@@ -25,10 +25,49 @@
                 <p>Published: {{ book.published_date }}</p>
                 <p>Price: {{ book.price }}</p>
                 <p>Description: {{ book.description }}</p>
-                <button class="btn btn-primary">Mua hàng</button>
-                <button class="btn btn-secondary">Đọc thử sách</button>
+                <a class="btn btn-primary" id="btn_add_to_cart">Add to Cart</a>
+                <a class="btn btn-dark" id="btnInstantPurchase">Instant Purchase</a>
+                <a class="btn btn-secondary">Read a sample</a>
             </div>
         </div>
     </div>
 </section>
+<script>
+    $(document).ready(function() {
+        $('#btn_add_to_cart').click(function() {
+            $.ajax({
+                url: "{% url 'add_to_cart' %}",
+                type: 'POST',
+                data: {
+                    'book_id': {{ book.id }},
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    update_cart_count();
+                    alert('Added to cart!');
+                }
+            });
+        });
+
+        $('#btnInstantPurchase').click(function() {
+            // create a form and submit it
+            var form = $('<form></form>');
+            form.attr("method", "POST");
+            form.attr("action", "{% url 'prepare_order' %}");
+            form.append('{% csrf_token %}');
+            var input = $("<input>")
+                .attr("type", "hidden")
+                .attr("name", "books[]")
+                .val({{ book.id }});
+            form.append(input);
+            var input = $("<input>")
+                .attr("type", "hidden")
+                .attr("name", "quantities[]")
+                .val(1);
+            form.append(input);
+            form.appendTo('body').submit();
+        });
+    });
+</script>
 {% endblock %}
+

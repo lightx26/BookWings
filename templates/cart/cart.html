@@ -44,7 +44,7 @@
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
             success: function (response) {
-                {#update_cart_count();#}
+                update_cart_count();
                 modal.find('.modal-body').html(response);
                 $('#cart-alert').html("<div class='alert alert-success alert-dismissible fade show' role='alert'>Removed from cart successfully<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>");
                 setTimeout(function () {
