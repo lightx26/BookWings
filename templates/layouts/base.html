@@ -64,14 +64,17 @@
                                     <li><a class="dropdown-item fw-semibold text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i>&nbsp; Sign out</a></li>
                                 </ul>
                             </div>
+                            {% if user.is_deliverer %}
+                                <a class="btn btn-outline-dark" href="">Order Received</a>
+                            {% else %}
+                                <a class="btn btn-outline-dark"  data-bs-toggle="modal" data-bs-target="#cartModal">
+                                    <i class="bi-cart-fill me-1"></i>
+                                    Cart
+                                    <span id="cart-count" class="badge bg-dark text-white ms-1 rounded-pill">{{ books_in_cart|length }}</span>
+                                </a>
+                                {%include "cart/cart.html" %}
 
-                            <a class="btn btn-outline-dark"  data-bs-toggle="modal" data-bs-target="#cartModal">
-                                <i class="bi-cart-fill me-1"></i>
-                                Cart
-                                <span id="cart-count" class="badge bg-dark text-white ms-1 rounded-pill">{{ books_in_cart|length }}</span>
-                            </a>
-                            {%include "cart/cart.html" %}
-
+                            {% endif %}
                         {% else %}
                             <button class="btn btn-outline-dark me-2" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
                             <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
