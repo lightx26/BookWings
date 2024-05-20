@@ -20,7 +20,10 @@ def prepare_order(request):
     if request.method == 'POST':
         books = request.POST.getlist('books[]')
         quantities = request.POST.getlist('quantities[]')
-
+        
+        if not books or not quantities:
+            return redirect('home')
+        
         tmp_total = 0
         for book_id, quantity in zip(books, quantities):
             book = books_services.get_book_by_id(book_id)
@@ -33,12 +36,15 @@ def prepare_order(request):
         }
         
         return redirect('make_order')
-    return redirect('view_cart')
+    return redirect('home')
 
 
 @login_required
 def make_order(request):
     prepared_order = request.session.get('prepared_order')
+    if len(prepared_order["books"]) == 0:
+        return redirect('home')
+    
     if request.method == 'POST':
         # Create initial order
         order = order_services.create_order(request.user, prepared_order.get('total'))
@@ -95,7 +101,14 @@ def make_order(request):
     addresses = accounts_services.get_addresses_by_user(request.user)
     shipping_companies = order_services.get_all_shipping_companies()
     o_coupons, d_coupons = coupon_services.get_coupon_for_order(request.user, prepared_order.get('total'))
-
+    
+    items = []
+    for book_id, quantity in zip(prepared_order.get('books'), prepared_order.get('quantities')):
+        book = books_services.get_book_by_id(book_id)
+        items.append({'book': book, 'quantity': quantity})
+    
+    prepared_order['items'] = items
+    
     return render(request, 'make_order.html',
                   {'prepared_order': prepared_order,
                    'addresses': addresses,

@@ -1,44 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Make order</title>
-</head>
-<body>
-<form method="post">
-    {% csrf_token %}
-    <div>
-        <label for="address">Address</label>
-        <select name="address" id="address">
-            {% for address in addresses %}
-                <option value="{{ address.id }}">{{ address.local_address }}, {{ address.district }}, {{ address.province }}</option>
-            {% endfor %}
-        </select>
+{% extends 'layouts/base.html' %}
+{% block title %}
+Make Order - BookWings
+{% endblock %}
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Make Order</h1>
+        </div>
     </div>
-    <div>
-        <label for="shipping_company">Shipping company</label>
-        <select name="shipping_company" id="shipping_company">
-            {% for shipping_company in shipping_companies %}
-                <option value="{{ shipping_company.id }}">{{ shipping_company.shipping_company_name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div>
-        <h3>Apply coupons</h3>
-    </div>
-    {% for coupon in coupons %}
-        <div>
-            {% if coupon.type == 'PERCENTAGE' %}
-                <label for="coupon">{{ coupon.code }} - Discount: {{ coupon.discount }}%</label>
-            {% else %}
-                <label for="coupon">{{ coupon.code }} - Discount: ${{ coupon.discount }}</label>
-            {% endif %}
-            <input id="coupon" type="checkbox" name="coupons[]" value="{{ coupon.id }}">
+</header>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Title</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in prepared_order.items %}
+                    <tr>
+                        <td><img src="/media/{{ item.book.cover }}" alt="{{ item.book.title }}" width="100"></td>
+                        <td>{{ item.book.title }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.book.price | floatformat }} ₫</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="mb-3 text-end">
+            <h3>Total: {{ prepared_order.total | floatformat}} ₫</h3>
         </div>
 
-
-    {% endfor %}
-    <input type="submit" value="Order">
-</form>
-</body>
-</html>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <select name="address" id="address" class="form-select">
+                    {% for address in addresses %}
+                        <option value="{{ address.id }}">{{ address.local_address }}, {{ address.district }}, {{ address.province }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="shipping_company" class="form-label">Shipping company</label>
+                <select name="shipping_company" id="shipping_company" class="form-select">
+                    {% for shipping_company in shipping_companies %}
+                        <option value="{{ shipping_company.id }}">{{ shipping_company.shipping_company_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <h3>Apply coupons</h3>
+            </div>
+            {% for coupon in coupons %}
+                <div class="mb-3">
+                    {% if coupon.type == 'PERCENTAGE' %}
+                        <label for="coupon" class="form-label">{{ coupon.code }} - Discount: {{ coupon.discount }}%</label>
+                    {% else %}
+                        <label for="coupon" class="form-label">{{ coupon.code }} - Discount: ${{ coupon.discount }}</label>
+                    {% endif %}
+                    <input id="coupon" type="checkbox" name="coupons[]" value="{{ coupon.id }}" class="form-check-input">
+                </div>
+            {% endfor %}
+            <input type="submit" class="btn btn-dark" value="Order">
+        </form>
+    </div>
+</section>
+{% endblock %}
