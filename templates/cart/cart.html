@@ -50,8 +50,19 @@
                 setTimeout(function () {
                     $('#cart-alert').html('');
                 }, 3000);
+                $('#total_price').text("0 ₫");
             }
         });
+    }
+
+    function update_total_price() {
+        var total_price = 0;
+        $("input[type=checkbox]:checked").each(function () {
+            var price = $(this).closest('.row').find('#book_price').text();
+            total_price += parseInt(price.replace(' ₫', '').replace('.', '') * $(this).closest('.row').find('input[type=number]').val());
+        });
+        var total_price_str = total_price.toLocaleString('vi-VN') + ' ₫';
+        $('#total_price').text(total_price_str);
     }
 
     $(document).ready(function () {
@@ -67,6 +78,8 @@
                     modal.find('.modal-body').html(response);
                 }
             });
+
+            update_total_price();
 
 
             $("input[type=checkbox]").change(function () {
@@ -90,8 +103,10 @@
                 if (value === 1) {
                     var $parent = $(this).closest('[data-id]');
                     var id = $parent.data('id');
-                    remove_cart_item(modal, id)
+                    remove_cart_item(modal, id);
                 }
+                
+                update_total_price();
             });
 
             $('.btn-plus').click(function () {
@@ -100,17 +115,17 @@
                 if (value < 999) {
                     $input.val(value + 1);
                 }
+
+                update_total_price();
             });
 
-            $("input[type=number]").change(function () {
-                var total_price = 0;
-                $("input[type=checkbox]:checked").each(function () {
-                    var price = $(this).closest('.row').find('#book_price').text();
-                    total_price += parseInt(price.replace(' ₫', '').replace('.', '') * $(this).closest('.row').find('input[type=number]').val());
-                });
-                var total_price_str = total_price.toLocaleString('vi-VN') + ' ₫';
-                $('#total_price').text(total_price_str);
-
+            $("input[type=number]").on("input", function () {
+                if ($(this).val() < 0) {
+                    $(this).val(1);
+                }
+                
+                update_total_price();
+                
                 $.ajax({
                     url: "{% url 'update_quantity' %}",
                     type: 'POST',

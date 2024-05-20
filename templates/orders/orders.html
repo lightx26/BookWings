@@ -17,9 +17,9 @@
                 <tr>
                     <th>Order ID</th>
                     <th>Order Date</th>
-                    <th>Order Total</th>
-                    <th>Status</th>
-                    <th>View</th>
+                    <th style="text-align: right;">Order Total</th>
+                    <th style="text-align: right;">Status</th>
+                    <th style="text-align: center;">View</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,10 +27,9 @@
                 <tr>
                     <td>{{ order.id }}</td>
                     <td>{{ order.date_ordered | date:"H:i:s F d, Y"}}</td>
-                    <td>{{ order.total | floatformat }}₫</td>
-                    <td>{{ order.delivery_info }}</td>
-                    <td>{{ order.delivery_info }}</td>
-                    <td><a class="btn"><i class="bi bi-eye"></i></a></td>
+                    <td style="text-align: right;" >{{ order.total | floatformat }}₫</td>
+                    <td style="text-align: right; color: {% if order.delivery_info == 'PENDING' %}orange{% elif order.delivery_info == 'DELIVERED' %}green{% else %}gray{% endif %}">{{ order.delivery_info }}</td>
+                    <td style="text-align: center;"><a class="btn"><i class="bi bi-eye"></i></a></td>
                 </tr>
                 {% endfor %}
             </tbody>
