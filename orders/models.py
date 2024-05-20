@@ -25,8 +25,11 @@ class Order(models.Model):
         
     @property
     def delivery_info(self):
-        DeliveryInformation = import_string('delivery.models.DeliveryInformation')
-        return DeliveryInformation.objects.get(order=self).status
+        try:
+            DeliveryInformation = import_string('delivery.models.DeliveryInformation')
+            return DeliveryInformation.objects.get(order=self).status
+        except DeliveryInformation.DoesNotExist:
+            return None
 
     def add_product(self, book, quantity):
         return BookInOrder.objects.create(order=self, book=book, quantity=quantity)
