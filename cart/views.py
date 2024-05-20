@@ -28,7 +28,7 @@ def remove_from_cart(request):
     book_id = request.POST.get('book_id')
     cart = cart_services.get_cart(request.user)
     cart.remove(book_id)
-    return redirect('view_cart')
+    return view_cart(request)
 
 
 @login_required
