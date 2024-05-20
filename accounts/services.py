@@ -1,4 +1,5 @@
 from accounts.models import Address, User, CustomerRank, CustomerRankConditions
+from delivery.models import DeliveryStatus
 import orders.services as order_services
 
 
@@ -23,7 +24,7 @@ def check_rank_up(customer):
 
     total_spent = 0
     for order in orders:
-        if order.deliveryinformation.status == 'DELIVERED':
+        if order.delivery_info == DeliveryStatus.DELIVERED:
             total_spent += order.total
 
     for rank in range(CustomerRank.DIAMOND, customer.rank, -1):
