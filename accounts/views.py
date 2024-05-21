@@ -148,7 +148,8 @@ def view_profile(request):
         return view_customer_profile(request, user, addresses)
     elif user.role == UserRole.DELIVERER:
         return view_deliverer_profile(request, user)
-
+    else:
+        return render(request, 'user/admin-profile.html', {'user': user})
 
 @role_required([UserRole.CUSTOMER])
 def view_customer_profile(request, customer, addresses):

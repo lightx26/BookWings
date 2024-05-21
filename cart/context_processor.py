@@ -5,7 +5,10 @@ def cart_custom_processor(request):
     if not request.user.is_authenticated:
         return {}
 
-    if request.user.is_admin or request.user.role == 'DELIVERER':
+    if request.user.is_admin:
+        return {}
+    
+    if request.user.is_deliverer:
         return {}
 
     cart = cart_services.get_cart(request.user)

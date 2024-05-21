@@ -1,0 +1,107 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Personal Information{% endblock %}
+
+{% block content %}
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Personal Information</h1>
+            </div>
+        </div>
+    </header>
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row">
+                <div class="col-6">
+                    <label class="sr-only mb-0 mx-2" for="id_phone">Phone number:</label>
+                    <input type="text" value="{{ user.phone_number }}" class="form-control mb-2" id="id_phone" disabled>
+                    <label class="sr-only mb-0 mx-2" for="id_email">Email:</label>
+                    <input type="text" value="{{ user.email }}" class="form-control mb-2" readonly id="id_email">
+                    <label class="sr-only mb-0 mx-2" for="id_fname">First name:</label>
+                    <input type="text" value="{{ user.first_name }}" class="form-control mb-2" id="id_fname" readonly>
+                    <label class="sr-only mb-0 mx-2" for="id_lname">Last name:</label>
+                    <input type="text" value="{{ user.last_name }}" class="form-control mb-2" id="id_lname" readonly>
+                    <label class="sr-only mb-0 mx-2" for="id_role">Role:</label>
+                    <input type="text" value="{{ user.role }}" class="form-control mb-2" id="id_role" disabled>
+                </div>
+                <div class="col-6">
+                    <p>Avatar:</p>
+                    <img src="/media/account/avatar-default.svg" alt="Avatar" class="img-fluid"
+                         style="width: 200px; height: 200px;">
+                    <br><br>
+                    <label class="sr-only mb-0 mx-2" for="id_role">Joined Date:</label>
+                    <input type="text" value="{{ user.date_joined }}" class="form-control mb-2" disabled>
+                    <label class="sr-only mb-0 mx-2" for="id_role">Last Login:</label>
+                    <input type="text" value="{{ user.last_login }}" class="form-control mb-2" disabled>
+                    <br>
+                    <a href="/accounts/profile/edit" class="btn btn-primary">Save</a>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#changePasswordModal">Change Password
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1"
+         aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add your change password form here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                    </button>
+                    <button type="button" class="btn btn-dark" id="change-pwd">Change Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#changePasswordModal').on('show.bs.modal', function (event) {
+                const modal = $(this);
+                modal.find('.modal-body').load("{% url 'change-password' %}", function () {
+                    $("#change-pwd-form input").each(function () {
+                        $(this).addClass('form-control');
+                    });
+                });
+
+                $('#change-pwd').click(function () {
+                    $.ajaxSetup({
+                        headers: {"X-CSRFToken": "{{ csrf_token }}"}
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'change-password' %}",
+                        data: $('#change-pwd-form').serialize(),
+                        success: function (response) {
+                            if (response['status'] == 'success') {
+                                $("#changepwd-status").html('<div class="alert alert-success" role="alert">Password changed successfully</div>');
+                                setTimeout(function () {
+                                    $('#changePasswordModal').modal('hide');
+                                }, 1000);
+                            } else {
+                                $("#changepwd-status").html('<div class="alert alert-danger" role="alert">' + response['error_message'] + '</div>');
+                            }
+                        },
+                        error: function (responseText, status, error) {
+                            $("#changepwd-status").html('<div class="alert alert-danger" role="alert">' + error + '</div>');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}

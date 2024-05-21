@@ -19,8 +19,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
         </head>
         <body>
-    <body>
-
 
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -50,14 +48,14 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                     {% if user.is_admin %}
-                                        <li><a class="dropdown-item" href="{% url 'admin' %}" target="_blank">Administrator page</a></li>
+                                        <li><a class="dropdown-item" href="/admin" target="_blank">Administrator page</a></li>
                                     {% endif %}
 
                                     <li><a class="dropdown-item" href="{% url 'profile' %}">Personal Information</a></li>
 
                                     {% if user.is_deliverer %}
-                                        <li><a class="dropdown-item" href="{% url 'view_arrived_shipments' %}">Deliverer page</a></li>
-                                    {% else %}
+                                        <li><a class="dropdown-item" href="{% url 'view_arrived_shipments'%}">Deliverer page</a></li>
+                                    {% elif not user.is_admin %}
                                         <li><a class="dropdown-item" href="{% url 'view_orders' %}">Order History</a></li>
                                     {% endif %}
 
@@ -66,7 +64,7 @@
                             </div>
                             {% if user.is_deliverer %}
                                 <a class="btn btn-outline-dark" href="{% url 'view_history_shipments' %}">Order Received</a>
-                            {% else %}
+                            {% elif not user.is_admin %}
                                 <a class="btn btn-outline-dark"  data-bs-toggle="modal" data-bs-target="#cartModal">
                                     <i class="bi-cart-fill me-1"></i>
                                     Cart
