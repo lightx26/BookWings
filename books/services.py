@@ -31,7 +31,7 @@ def get_trendy_books():
                 book_sold[book_in_order.book.id] = book_in_order.quantity
 
     trendy_book_ids = sorted(book_sold.items(), key=lambda x: -x[1])[:10]    # Top 10 best-selling books
-    return Book.objects.filter(pk__in=[book_id for book_id, _ in trendy_book_ids]).order_by('-id')
+    return Book.objects.filter(pk__in=[book_id for book_id, _ in trendy_book_ids])
 
 
 def get_all_categories():

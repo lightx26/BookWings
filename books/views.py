@@ -25,7 +25,7 @@ from django.http import JsonResponse
 
 def view_books(request):
     books = books_services.get_all_books()
-    paginator = Paginator(books, 15)
+    paginator = Paginator(books, 16)
     page = request.GET.get('page', 1)
     # books_json = serializers.serialize("json", books)
     return render(request, 'books.html', {'books': paginator.page(page)})

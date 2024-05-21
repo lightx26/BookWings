@@ -1,6 +1,6 @@
 from delivery.models import Shipping, DeliveryStatus
 from orders.models import Order
-from datetime import date
+from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 
 
@@ -49,7 +49,7 @@ def get_orders_in_time(from_date, to_date):
 
 
 def get_recent_order_by_time(delta_month):
-    return get_orders_in_time(date.today() - relativedelta(months=delta_month), date.today())
+    return get_orders_in_time(date.today() - relativedelta(months=delta_month), datetime.now())
 
 
 def create_order(customer, total):

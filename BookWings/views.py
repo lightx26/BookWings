@@ -12,7 +12,7 @@ def index(request):
     coupons = coupons_services.get_new_coupons()
     categories = books_services.get_all_categories()
 
-    paginator = Paginator(books, 16)
+    paginator = Paginator(books, 8)
     page = request.GET.get('page', 1)
 
     return render(request, 'home/index.html',
