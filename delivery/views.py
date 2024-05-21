@@ -15,10 +15,15 @@ def view_arrived_shipment(request):
 
 
 @role_required([UserRole.DELIVERER])
-def view_deliverer_shipment(request):
-    status = request.POST.get('status', None)
-    shipments = delivery_services.get_shipments(deliverer=request.user, status=status)
-    return render(request, 'history_shipments.html', context={'shipments': shipments})
+def view_success_shipment(request):
+    shipments = delivery_services.get_shipments(deliverer=request.user, status=DeliveryStatus.DELIVERED)
+    return render(request, 'shipments/delivered.html', context={'shipments': shipments})
+
+
+@role_required([UserRole.DELIVERER])
+def view_delivering_shipment(request):
+    shipments = delivery_services.get_shipments(deliverer=request.user, status=DeliveryStatus.DELIVERING)
+    return render(request, 'shipment/delivering.html', context={'shipments': shipments})
 
 
 @role_required([UserRole.DELIVERER])
