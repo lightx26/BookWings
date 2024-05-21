@@ -126,7 +126,7 @@ def make_order(request):
 
     prepared_order['items'] = items
 
-    return render(request, 'make_order.html',
+    return render(request, 'orders/make_order.html',
                   {'prepared_order': prepared_order,
                    'addresses': addresses,
                    'shipping_companies': shipping_companies,

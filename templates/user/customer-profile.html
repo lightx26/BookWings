@@ -25,6 +25,8 @@
                     <input type="text" value="{{ user.last_name }}" class="form-control mb-2" id="id_lname" readonly>
                     <label class="sr-only mb-0 mx-2" for="id_role">Role:</label>
                     <input type="text" value="{{ user.role }}" class="form-control mb-2" id="id_role" disabled>
+                    <label class="sr-only mb-0 mx-2" for="id_rank">Rank:</label>
+                    <input type="text" value="{{ user.get_rank_display }}" class="form-control mb-2" id="id_rank" disabled>
                 </div>
                 <div class="col-6">
                     <p>Avatar:</p>
@@ -118,7 +120,7 @@
                         <button type="submit" class="btn btn-dark" id="id_add_addr">Add Address</button>
                     </div>
                 </form>
-                        
+
             </div>
         </div>
     </div>
