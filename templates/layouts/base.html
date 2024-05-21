@@ -56,7 +56,7 @@
                                     <li><a class="dropdown-item" href="{% url 'profile' %}">Personal Information</a></li>
 
                                     {% if user.is_deliverer %}
-                                        <li><a class="dropdown-item" href="#!">Deliverer page</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'view_arrived_shipments' %}">Deliverer page</a></li>
                                     {% else %}
                                         <li><a class="dropdown-item" href="{% url 'view_orders' %}">Order History</a></li>
                                     {% endif %}
@@ -65,7 +65,7 @@
                                 </ul>
                             </div>
                             {% if user.is_deliverer %}
-                                <a class="btn btn-outline-dark" href="">Order Received</a>
+                                <a class="btn btn-outline-dark" href="{% url 'view_history_shipments' %}">Order Received</a>
                             {% else %}
                                 <a class="btn btn-outline-dark"  data-bs-toggle="modal" data-bs-target="#cartModal">
                                     <i class="bi-cart-fill me-1"></i>

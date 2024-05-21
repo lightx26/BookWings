@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+{% block title %} Orders {% endblock %}
+{% block content %}
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">New shipments just arrived!</h1>
+            </div>
+        </div>
+    </header>
+    <section class="py-5">
+        <div class="shipments-section">
+            <div class="container px-4 px-lg-5 mt-5">
+                <h3>Orders of {{ user.first_name }}</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ordered at</th>
+                        <th>Deliver to</th>
+                        <th>Name of customer</th>
+                        <th>Phone number</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for shipment in shipments %}
+                        <tr>
+                            <td>{{ shipment.id }}</td>
+                            <td>{{ shipment.order.date_ordered | date:"H:i:s F d, Y" }}</td>
+                            <td>{{ shipment.address }}</td>
+                            <td>{{ shipment.order.customer.last_name }} {{ shipment.order.customer.first_name }}</td>
+                            <td>{{ shipment.order.customer.phone_number }}</td>
+                            <td>{{ shipment.order.total | floatformat }} ₫</td>
+                            <td><a class="btn btn-dark btn-take">Take</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $('.btn-take').click(function () {
+                    let order_id = $(this).closest('tr').find('td').eq(0).text();
+                    $.ajax({
+                        url: '/delivery/take/' + order_id,
+                        type: 'GET',
+                        success: function (response) {
+                            location.reload();
+                        }
+                    });
+                });
+            });
+        </script>
+    </section>
+{% endblock %}

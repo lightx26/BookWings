@@ -1,0 +1,64 @@
+{% extends "layouts/base.html" %}
+{% block title %} Orders {% endblock %}
+{% block content %}
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Delivery History</h1>
+            </div>
+        </div>
+    </header>
+    <section class="py-5">
+        <div class="mb3 d-flex justify-content-center" role="group" aria-label="Filter orders">
+            <button class="btn btn-outline-dark switch-btn active" id="delivering" style="width: 200px">On the way
+            </button>
+            <button class="btn btn-outline-dark switch-btn" id="delivered" style="width: 200px">Completed
+            </button>
+        </div>
+        <div class="shipments-section">
+
+        </div>
+        <script>
+            function loadShipments(type) {
+                let url;
+                if (type === 'delivering') {
+                    url = "{% url 'view_delivering_shipment' %}";
+                } else if (type === 'delivered') {
+                    url = "{% url 'view_success_shipment' %}";
+                }
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $('.shipments-section').html(data);
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                $('.switch-btn').click(function () {
+                    $('.switch-btn').removeClass('active');
+                    $(this).addClass('active');
+                    const type = $(this).attr('id');
+                    loadShipments(type)
+                });
+
+                loadShipments('delivering');
+
+                $('.shipments-section').on('click', '.btn-return, .btn-complete', function () {
+                    let shipment_id = $(this).closest('tr').find('td').eq(0).text();
+                    let action = $(this).hasClass('btn-return') ? 'return' : 'complete';
+                    $.ajax({
+                        url: '/delivery/' + action + '/' + shipment_id,
+                        type: 'GET',
+                        success: function (response) {
+                            location.reload();
+                        }
+                    });
+                });
+
+            });
+        </script>
+    </section>
+{% endblock %}

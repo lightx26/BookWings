@@ -11,19 +11,26 @@ import delivery.services as delivery_services
 @role_required([UserRole.ADMIN, UserRole.DELIVERER])
 def view_arrived_shipment(request):
     shipments = delivery_services.get_shipments(status=DeliveryStatus.ARRIVED)
-    return render(request, 'arrived_deliveries.html', context={'shipments': shipments})
+    return render(request, 'shipments/arrived.html', context={'shipments': shipments})
 
 
 @role_required([UserRole.DELIVERER])
 def view_success_shipment(request):
     shipments = delivery_services.get_shipments(deliverer=request.user, status=DeliveryStatus.DELIVERED)
+    print(shipments.count())
     return render(request, 'shipments/delivered.html', context={'shipments': shipments})
+
+
+@role_required([UserRole.DELIVERER])
+def view_history_shipment(request):
+    return render(request, 'shipments/shipments.html')
 
 
 @role_required([UserRole.DELIVERER])
 def view_delivering_shipment(request):
     shipments = delivery_services.get_shipments(deliverer=request.user, status=DeliveryStatus.DELIVERING)
-    return render(request, 'shipment/delivering.html', context={'shipments': shipments})
+    print(shipments.count())
+    return render(request, 'shipments/delivering.html', context={'shipments': shipments})
 
 
 @role_required([UserRole.DELIVERER])
@@ -45,7 +52,7 @@ def return_shipment(request, shipment_id):
         shipment.delivery_by = None
         shipment.save()
 
-    return redirect('history_shipments')
+    return redirect('view_history_shipments')
     # return render(request, 'shipment_returned.html', context={'shipment': shipment}
 
 
@@ -57,5 +64,5 @@ def complete_shipment(request, shipment_id):
         shipment.finish_delivery_date = datetime.now()
         shipment.save()
 
-    return redirect('history_shipments')
+    return redirect('view_history_shipments')
     # return render(request, 'shipment_delivered.html', context={'shipment': shipment})

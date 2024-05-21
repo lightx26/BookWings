@@ -1,0 +1,31 @@
+<div class="container px-4 px-lg-5 mt-5">
+    <h3>Orders of {{ user.first_name }}</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ordered at</th>
+            <th>Deliver to</th>
+            <th>Name of customer</th>
+            <th>Phone number</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for shipment in shipments %}
+            <tr>
+                <td style="vertical-align: middle">{{ shipment.id }}</td>
+                <td style="vertical-align: middle">{{ shipment.order.date_ordered | date:"H:i:s F d, Y" }}</td>
+                <td style="vertical-align: middle">{{ shipment.address }}</td>
+                <td style="vertical-align: middle">{{ shipment.order.customer.last_name }} {{ shipment.order.customer.first_name }}</td>
+                <td style="vertical-align: middle">{{ shipment.order.customer.phone_number }}</td>
+                <td style="vertical-align: middle">{{ shipment.order.total | floatformat }} ₫</td>
+                <td>
+                    <a class="btn btn-return"><i class="bi bi-x-circle h4"></i></a>
+                    <a class="btn btn-complete"><i class="bi bi-check2-circle h4"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
