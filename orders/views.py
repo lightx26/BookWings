@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 from accounts.decorators import role_required
 from accounts.models import Address
-from coupons.models import CouponType
+from coupons.models import CouponType, UsageType
 from delivery.models import Shipping, DeliveryStatus, DeliveryInformation
 
 import orders.services as order_services
@@ -51,8 +51,13 @@ def make_order(request):
         order = order_services.create_order(request.user, prepared_order.get('total'))
 
         # Add applied coupons to order
-        for coupon_id in request.POST.getlist('coupons[]'):
-            order.coupon.add(coupon_services.get_coupon_by_id(coupon_id))
+        order_coupon = request.POST.get('order_coupon')
+        if order_coupon:
+            order.coupon.add(coupon_services.get_coupon_by_id(order_coupon))
+
+        delivery_coupon = request.POST.get('delivery_coupon')
+        if delivery_coupon:
+            order.coupon.add(coupon_services.get_coupon_by_id(delivery_coupon))
 
         # Set delivery information
         try:
@@ -77,12 +82,23 @@ def make_order(request):
 
         # Calculate total price
         tmp_total = Decimal(prepared_order.get('total'))
+        tmp_delivery_fee = delivery_info.delivery_fee
         for coupon in order.coupon.all():
-            if coupon.type == CouponType.PERCENTAGE:
-                tmp_total -= min(tmp_total * coupon.discount / 100, coupon.max_discount)
-            elif coupon.type == CouponType.FIXED:
-                tmp_total -= coupon.discount
-        order.total = delivery_info.delivery_fee + tmp_total
+            if coupon.usage_type == UsageType.ORDER:
+                if coupon.type == CouponType.PERCENTAGE:
+                    tmp_total -= min(tmp_total * coupon.discount / 100, coupon.max_discount)
+                elif coupon.type == CouponType.FIXED:
+                    tmp_total -= min(coupon.discount, tmp_total)
+            else:
+                if coupon.type == CouponType.PERCENTAGE:
+                    tmp_delivery_fee -= min(tmp_delivery_fee * coupon.discount / 100, coupon.max_discount)
+                elif coupon.type == CouponType.FIXED:
+                    tmp_delivery_fee -= min(coupon.discount, tmp_delivery_fee)
+
+        delivery_info.delivery_fee = tmp_delivery_fee
+        delivery_info.save()
+
+        order.total = tmp_delivery_fee + tmp_total
 
         # Save order
         order_services.save_order(order)

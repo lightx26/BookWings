@@ -1,0 +1,145 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}
+    Make Order - BookWings
+{% endblock %}
+{% block content %}
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Make Order</h1>
+            </div>
+        </div>
+    </header>
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="mb-3">
+                <h3>Order details</h3>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Book</th>
+                    <th>Title</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in prepared_order.items %}
+                    <tr>
+                        <td><strong>{{ forloop.counter }}</strong></td>
+                        <td><img src="{% get_media_prefix %}{{ item.book.cover }}" alt="{{ item.book.title }}"
+                                 width="100"></td>
+                        <td>{{ item.book.title }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.book.price | floatformat }} ₫</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="mb-3 text-end">
+                <h3>Total: {{ prepared_order.total | floatformat }} ₫</h3>
+            </div>
+            <br>
+            <hr>
+            <br>
+            <form method="post" action="{% url 'make_order' %}">
+                {% csrf_token %}
+                {% if order_coupons %}
+                    <div class="coupons-section">
+                        <div class="mb-3">
+                            <h3>Coupons for order</h3>
+                        </div>
+                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
+                             id="order-coupons">
+                            {% for coupon in order_coupons %}
+                                <div class="col mb-5">
+                                    <div class="card border-danger">
+                                        <div class="card-body">
+                                            <input type="radio" id="order_coupon_{{ coupon.id }}" 
+                                                   name="order_coupon"
+                                                   value="{{ coupon.id }}">
+                                            <label for="order_coupon_{{ coupon.id }}"
+                                                   class="card-title text-danger text-bolder">
+                                                {% if coupon.type == 'PERCENTAGE' %}
+                                                    SAVE {{ coupon.discount | floatformat }}%
+                                                {% elif coupon.type == 'FIXED' %}
+                                                    SAVE {{ coupon.discount }} ₫
+                                                {% endif %}
+                                            </label>
+                                            <div>
+                                                <span class="card-text">Use code: <strong>{{ coupon.code }}</strong></span>
+                                            </div>
+                                            <span class="card-text"
+                                                  style="font-style: italic">Valid until {{ coupon.expiration_date }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if delivery_coupons %}
+                    <div class="coupons-section">
+                        <div class="mb-3">
+                            <h3>Coupons for delivery</h3>
+                        </div>
+                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
+                             id="delivery-coupons">
+                            {% for coupon in delivery_coupons %}
+                                <div class="col mb-5">
+                                    <div class="card border-success">
+                                        <div class="card-body">
+                                            <input type="radio" id="delivery_coupon_{{ coupon.id }}"
+                                                   name="delivery_coupon"
+                                                   value="{{ coupon.id }}">
+                                            <label for="delivery_coupon_{{ coupon.id }}"
+                                                   class="card-title text-success text-bolder">
+                                                {% if coupon.type == 'PERCENTAGE' %}
+                                                    SAVE {{ coupon.discount | floatformat }}%
+                                                {% elif coupon.type == 'FIXED' %}
+                                                    SAVE {{ coupon.discount }} ₫
+                                                {% endif %}
+                                            </label>
+                                            <div>
+                                                <span class="card-text">Use code: <strong>{{ coupon.code }}</strong></span>
+                                            </div>
+                                            <span class="card-text"
+                                                  style="font-style: italic">Valid until {{ coupon.expiration_date }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                <br>
+                <hr>
+                <br>
+                <div class="mb-3">
+                    <label for="shipping_company" class="form-label">Shipping company</label>
+                    <select name="shipping_company" id="shipping_company" class="form-select">
+                        {% for shipping_company in shipping_companies %}
+                            <option value="{{ shipping_company.id }}">{{ shipping_company.shipping_company_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <select name="address" id="address" class="form-select">
+                        {% for address in addresses %}
+                            <option value="{{ address.id }}">{{ address.local_address }}, {{ address.district }}, {{ address.province }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <a href="{% url 'home' %}" class="btn btn-outline-dark">Cancel</a>
+                <input type="submit" class="btn btn-dark" value="Order">
+            </form>
+        </div>
+    </section>
+{% endblock %}
