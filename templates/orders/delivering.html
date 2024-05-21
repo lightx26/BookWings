@@ -6,7 +6,7 @@
             <th>Order ID</th>
             <th>Order Date</th>
             <th>Total</th>
-            <th>Status</th>
+            <th style="text-align: left;">Status</th>
         </tr>
         </thead>
         <tbody>
@@ -15,7 +15,7 @@
                 <td>{{ order.id }}</td>
                 <td>{{ order.date_ordered | date:"H:i:s F d, Y" }}</td>
                 <td>{{ order.total | floatformat }} ₫</td>
-                <td style="text-align: right; color: {% if order.delivery_info == 'PENDING' %}orange{% elif order.delivery_info == 'DELIVERED' %}green{% else %}gray{% endif %}">{{ order.delivery_info }}</td>
+                <td style="text-align: left; color: {% if order.delivery_info == 'PENDING' %}orange{% elif order.delivery_info == 'DELIVERED' %}green{% else %}gray{% endif %}">{{ order.delivery_info }}</td>
                 <td><a class="btn view-order-detail"><i class="bi bi-eye"></i></a></td>
             </tr>
         {% endfor %}
