@@ -19,7 +19,7 @@
         <div class="container px-4 px-lg-5 mt-5 bg-white rounded-4 shadow">
             <br>
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="display-6 text-uppercase fw-bold mb-0 text-danger">Trendy Books</h2>
+                <h2 class="display-6 text-uppercase fw-bold mb-0 text-danger">Trendy Books <svg xmlns="http://www.w3.org/2000/svg" width="1.35em" height="1.2em" viewBox="0 0 576 512"><path fill="#ea0606" d="M384 160c-17.7 0-32-14.3-32-32s14.3-32 32-32h160c17.7 0 32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32v-82.7L342.6 374.6c-12.5 12.5-32.8 12.5-45.3 0L192 269.3L54.6 406.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0L320 306.7L466.7 160z"/></svg></h2>
                 <a class="btn btn-outline-dark" href="{% url 'view_books' %}">More<i
                         class="bi bi-arrow-right-short"></i></a>
             </div>
@@ -28,7 +28,7 @@
         <div class="container px-4 px-lg-5 mt-5 bg-white rounded-4 shadow">
             <br>
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="display-6 text-uppercase fw-bold mb-0 text-danger">Hot coupons!</h2>
+                <h2 class="display-6 text-uppercase fw-bold mb-0 text-danger">Hot coupons! <i class="bi bi-fire h2"></i></h2>
                 {% if user.is_authenticated %}
                     <a class="btn btn-outline-dark" href="{% url 'view_books' %}">Your coupons<i
                             class="bi bi-arrow-right-short"></i></a>
