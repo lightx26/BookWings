@@ -157,20 +157,26 @@
                 form.attr("method", "POST");
                 form.attr("action", "{% url 'prepare_order' %}");
                 form.append('{% csrf_token %}');
+                
+                let ids = [];
                 $("input[type=checkbox]:checked").each(function () {
                     var input = $("<input>")
                         .attr("type", "hidden")
                         .attr("name", "books[]")
                         .val($(this).val());
+
+                    ids.push($(this).val());
                     form.append(input);
                 });
 
                 $("input[type=number]").each(function () {
-                    var input = $("<input>")
-                        .attr("type", "hidden")
-                        .attr("name", "quantities[]")
-                        .val($(this).val());
-                    form.append(input);
+                    if (ids.includes($(this).closest('.row').find('input[type=checkbox]').val())) {
+                        var input = $("<input>")
+                            .attr("type", "hidden")
+                            .attr("name", "quantities[]")
+                            .val($(this).val());
+                        form.append(input);
+                    }
                 });
 
                 form.appendTo('body').submit();

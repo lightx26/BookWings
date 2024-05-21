@@ -20,7 +20,7 @@
                     <div class="input-group mb-3">
                         <button class="btn btn-light btn-minus" type="button"><i class="bi bi-dash"></i></button>
                         <input type="number" class="form-control quantity-input" name="quantities[]"
-                               style="width: 30px; text-align: center" value="{{ book_ic.quantity }}" min="1" max="999">
+                               style="width: 30px; text-align: center" data-id="{{ book_ic.book.id }}" value="{{ book_ic.quantity }}" min="1" max="999">
                         <button class="btn btn-light btn-plus" type="button"><i class="bi bi-plus"></i></button>
                     </div>
                 </div>
