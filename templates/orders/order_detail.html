@@ -1,15 +1,18 @@
+{% load static %}
 {% for item in order_items %}
-<div class="product-row">
-    <div class="row">
-        <div class="col-2 text-left">
-            <img src="/media/{{ item.book.cover }}" alt="{{ item.book.title }}" class="img-fluid">
+    <div class="product-row">
+        <div class="row">
+            <div class="col-2 text-left">
+                <img src="{% get_media_prefix %}{{ item.book.cover }}" alt="{{ item.book.title }}" class="img-fluid">
+            </div>
+            <div class="col-3 d-flex align-items-center justify-content-start text-left">{{ item.book.title }}</div>
+            <div class="col-3 d-flex align-items-center justify-content-start text-left">{{ item.quantity }}</div>
+            <div class="col-3 d-flex align-items-center justify-content-start text-left">{{ item.book.price|floatformat }}
+                ₫
+            </div>
         </div>
-        <div class="col-3 d-flex align-items-center justify-content-start text-left">{{ item.book.title }}</div>
-        <div class="col-3 d-flex align-items-center justify-content-start text-left">{{ item.quantity }}</div>
-        <div class="col-3 d-flex align-items-center justify-content-start text-left">{{ item.book.price|floatformat }} ₫</div>
+        <hr>
     </div>
-    <hr>
-</div>
 {% endfor %}
 
 <div class="row">
@@ -20,12 +23,30 @@
 
 <div class="row">
     <div class="col-9 d-flex align-items-center justify-content-start text-left">
-        Delivery Info: {{ order.delivery_info }}
+        Status: {{ delivery_info.status }}
     </div>
 </div>
 
 <div class="row">
     <div class="col-9 d-flex align-items-center justify-content-start text-left">
-        Delivery Address: {{ order.delivery_address }}
+        Delivery fee: {{ delivery_info.delivery_fee|floatformat }} ₫
+    </div>
+    <div class="col-9 d-flex align-items-center justify-content-start text-left">
+        Shipping company: {{ delivery_info.shipping_company }}
+    </div>
+</div>
+{% if delivery_info.status == 'DELIVERED' %}
+    <div class="row">
+        <div class="col-9 d-flex align-items-center justify-content-start text-left">
+            Delivered by {{ delivery_info.delivery_by.last_name }} {{ delivery_info.delivery_by.first_name }}
+            on {{ delivery_info.finish_delivery_date }}
+        </div>
+    </div>
+{% endif %}
+
+
+<div class="row">
+    <div class="col-9 d-flex align-items-center justify-content-start text-left">
+        Delivery Address: {{ delivery_info.address }}
     </div>
 </div>

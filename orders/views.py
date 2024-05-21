@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from accounts.decorators import role_required
 from accounts.models import Address
 from coupons.models import CouponType
-from delivery.models import Shipping, DeliveryStatus
+from delivery.models import Shipping, DeliveryStatus, DeliveryInformation
 
 import orders.services as order_services
 import coupons.services as coupon_services
@@ -14,16 +14,17 @@ import accounts.services as accounts_services
 import books.services as books_services
 import cart.services as cart_services
 
+
 # Create your views here.
 @login_required
 def prepare_order(request):
     if request.method == 'POST':
         books = request.POST.getlist('books[]')
         quantities = request.POST.getlist('quantities[]')
-        
+
         if not books or not quantities:
             return redirect('home')
-        
+
         tmp_total = 0
         for book_id, quantity in zip(books, quantities):
             book = books_services.get_book_by_id(book_id)
@@ -34,7 +35,7 @@ def prepare_order(request):
             'quantities': quantities,
             'total': float(tmp_total)
         }
-        
+
         return redirect('make_order')
     return redirect('home')
 
@@ -44,7 +45,7 @@ def make_order(request):
     prepared_order = request.session.get('prepared_order')
     if len(prepared_order["books"]) == 0:
         return redirect('home')
-    
+
     if request.method == 'POST':
         # Create initial order
         order = order_services.create_order(request.user, prepared_order.get('total'))
@@ -101,20 +102,21 @@ def make_order(request):
     addresses = accounts_services.get_addresses_by_user(request.user)
     shipping_companies = order_services.get_all_shipping_companies()
     o_coupons, d_coupons = coupon_services.get_coupon_for_order(request.user, prepared_order.get('total'))
-    
+
     items = []
     for book_id, quantity in zip(prepared_order.get('books'), prepared_order.get('quantities')):
         book = books_services.get_book_by_id(book_id)
         items.append({'book': book, 'quantity': quantity})
-    
+
     prepared_order['items'] = items
-    
+
     return render(request, 'make_order.html',
                   {'prepared_order': prepared_order,
                    'addresses': addresses,
                    'shipping_companies': shipping_companies,
                    'order_coupons': o_coupons,
-                   'delivery_coupons': d_coupons,})
+                   'delivery_coupons': d_coupons, })
+
 
 # @login_required
 # def payment(request, order_id):
@@ -131,7 +133,7 @@ def view_orders(request):
     order_id = request.GET.get('order_id')
     if order_id:
         return view_order_details(request, order_id)
-    
+
     orders = order_services.get_orders_by_customer(request.user)
     return render(request, 'orders/orders.html', {'orders': orders})
 
@@ -147,7 +149,23 @@ def view_delivering_orders(request):
     orders = order_services.get_not_delivered_orders(request.user)
     return render(request, 'orders/delivering.html', {'orders': orders})
 
+
 @role_required('CUSTOMER')
 def view_order_details(request, order_id):
     order = order_services.get_order_by_id(order_id)
-    return render(request, 'orders/order_detail.html', {"order":order,'order_items': order.bookinorder_set.all()})
+
+    if hasattr(order, 'bookinorder_set'):
+        order_items = order.bookinorder_set.all()
+    else:
+        order_items = []
+
+    if hasattr(order, 'deliveryinformation'):
+        delivery_info = order.deliveryinformation
+    else:
+        delivery_info = None
+
+    return render(request, 'orders/order_detail.html',
+                  {"order": order,
+                   'order_items': order_items,
+                   'delivery_info': delivery_info,
+                   })

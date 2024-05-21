@@ -8,70 +8,80 @@
                 <h1 class="display-4 fw-bolder">Orders History</h1>
             </div>
         </div>
-    </div>
-</header>
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Order Date</th>
-                    <th style="text-align: right;">Order Total</th>
-                    <th style="text-align: right;">Status</th>
-                    <th style="text-align: center;">View</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                <tr>
-                    <td>{{ order.id }}</td>
-                    <td>{{ order.date_ordered | date:"H:i:s F d, Y"}}</td>
-                    <td style="text-align: right;" >{{ order.total | floatformat }}₫</td>
-                    <td style="text-align: right; color: {% if order.delivery_info == 'PENDING' %}orange{% elif order.delivery_info == 'DELIVERED' %}green{% else %}gray{% endif %}">{{ order.delivery_info }}</td>
-                    <td style="text-align: center;" class="view-order-detail"><a class="btn"><i class="bi bi-eye"></i></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    </header>
+    <section class="py-5">
+        <div class="mb3 d-flex justify-content-center" role="group" aria-label="Filter orders">
+            <button class="btn btn-outline-dark active switch-btn" id="delivered" style="width: 200px">Delivered
+            </button>
+            <button class="btn btn-outline-dark switch-btn" id="delivering" style="width: 200px">Delivering
+            </button>
+        </div>
+        <div class="orders-section">
 
-    <!-- Modal -->
-    <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderDetailModalLabel">Order Detail</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="order-detail-body">
-                    <!-- Order detail goes here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderDetailModalLabel">Order Detail</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="order-detail-body">
+                        <!-- Order detail goes here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-<script>
-$(document).ready(function() {
-    $('.view-order-detail').click(function() {
-        var order_id = $(this).closest('tr').find('td').eq(0).text();
-        $.ajax({
-            url: "{% url 'view_orders' %}",
-            type: 'GET',
-            data: {
-                'order_id': order_id
-            },
-            success: function(data) {
-                $('#orderDetailModal').modal('show');
-                $('#orderDetailModalLabel').html('Order Detail - ' + order_id);
-                $('#order-detail-body').html(data);
+        <script>
+            function loadOrders(type) {
+                let url;
+                if (type === 'delivered') {
+                    url = "{% url 'view_delivered_orders' %}";
+                } else if (type === 'delivering') {
+                    url = "{% url 'view_delivering_orders' %}";
+                }
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $('.orders-section').html(data);
+                    }
+                });
             }
-        });
-    });
-});
-</script>
-</section>
+
+            $(document).ready(function () {
+                $('.switch-btn').click(function () {
+                    $('.switch-btn').removeClass('active');
+                    $(this).addClass('active');
+                    const type = $(this).attr('id');
+                    loadOrders(type)
+                });
+                
+                loadOrders('delivered');
+
+                $('.orders-section').on('click', '.view-order-detail', function () {
+                    var order_id = $(this).closest('tr').find('td').eq(0).text();
+                    $.ajax({
+                        url: "{% url 'view_orders' %}",
+                        type: 'GET',
+                        data: {
+                            'order_id': order_id
+                        },
+                        success: function (data) {
+                            $('#orderDetailModal').modal('show');
+                            $('#orderDetailModalLabel').html('Order Detail - ' + order_id);
+                            $('#order-detail-body').html(data);
+                        }
+                    });
+                });
+            });
+        </script>
+    </section>
 {% endblock %}

@@ -1,24 +1,24 @@
 <div class="container px-4 px-lg-5 mt-5">
-            <h3>Orders of {{ user.first_name }}</h3>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Order Date</th>
-                    <th>Delivered on</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for order in orders %}
-                    <tr>
-                        <td>{{ order.id }}</td>
-                        <td>{{ order.date_ordered | date:"H:i:s F d, Y" }}</td>
-                        <td>{{ order.deliveryinformation.finish_delivery_date | date:"H:i:s F d, Y" }}</td>
-                        <td>{{ order.total | floatformat }} ₫</td>
-                        <td><a class="btn"><i class="bi bi-eye"></i></a></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <h3>Orders of {{ user.first_name }}</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Delivered on</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.date_ordered | date:"H:i:s F d, Y" }}</td>
+                <td>{{ order.deliveryinformation.finish_delivery_date | date:"H:i:s F d, Y" }}</td>
+                <td>{{ order.total | floatformat }} ₫</td>
+                <td><a class="btn view-order-detail"><i class="bi bi-eye"></i></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
