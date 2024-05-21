@@ -25,7 +25,7 @@ def get_trendy_books():
     book_sold = {}
     for order in tmp_orders:
         for book_in_order in order.bookinorder_set.all():
-            if book_in_order.book in book_sold:
+            if book_in_order.book.id in book_sold:
                 book_sold[book_in_order.book.id] += book_in_order.quantity
             else:
                 book_sold[book_in_order.book.id] = book_in_order.quantity

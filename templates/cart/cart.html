@@ -148,6 +148,10 @@
             });
 
             $("#btnPurchase").click(function () {
+                if ($("input[type=checkbox]:checked").length == 0) {
+                    alert("Please select at least one book to purchase");
+                    return;
+                }
                 // create form 
                 var form = $('<form></form>');
                 form.attr("method", "POST");
