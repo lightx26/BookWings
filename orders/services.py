@@ -23,7 +23,7 @@ def get_orders_by_customer(customer, status=None):
 
 
 def get_delivered_orders(customer):
-    orders = get_orders_by_customer(customer)
+    orders = get_orders_by_customer(customer).order_by('-date_ordered')
     delivered_orders = []
     for order in orders:
         if order.delivery_info == DeliveryStatus.DELIVERED:
@@ -32,7 +32,7 @@ def get_delivered_orders(customer):
 
 
 def get_not_delivered_orders(customer):
-    orders = get_orders_by_customer(customer)
+    orders = get_orders_by_customer(customer).order_by('-date_ordered')
     delivering_orders = []
     for order in orders:
         if order.delivery_info != DeliveryStatus.DELIVERED:
