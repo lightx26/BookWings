@@ -48,6 +48,22 @@
 <script>
 $(document).ready(function () {
     $(".add-to-cart").click(function (e) {
+        
+        if ('{{ user.is_authenticated }}' == 'False') {
+            alert('Please login to purchase');
+            return;
+        }
+
+        if ('{{ user.is_admin }}' == 'True') {
+            alert('Admin cannot purchase');
+            return;
+        }
+
+        if ('{{ user.is_deliverer }}' == 'True') {
+            alert('Deliverer cannot purchase');
+            return;
+        }
+
         e.preventDefault();
         var book_id = $(this).attr('value');
         $.ajax({

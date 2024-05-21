@@ -35,6 +35,21 @@
 <script>
     $(document).ready(function() {
         $('#btn_add_to_cart').click(function() {
+            if ('{{ user.is_authenticated }}' == 'False') {
+                alert('Please login to purchase');
+                return;
+            }
+
+            if ('{{ user.is_admin }}' == 'True') {
+                alert('Admin cannot purchase');
+                return;
+            }
+
+            if ('{{ user.is_deliverer }}' == 'True') {
+                alert('Deliverer cannot purchase');
+                return;
+            }
+            
             $.ajax({
                 url: "{% url 'add_to_cart' %}",
                 type: 'POST',
@@ -50,6 +65,22 @@
         });
 
         $('#btnInstantPurchase').click(function() {
+
+            if ('{{ user.is_authenticated }}' == 'False') {
+                alert('Please login to purchase');
+                return;
+            }
+
+            if ('{{ user.is_admin }}' == 'True') {
+                alert('Admin cannot purchase');
+                return;
+            }
+
+            if ('{{ user.is_deliverer }}' == 'True') {
+                alert('Deliverer cannot purchase');
+                return;
+            }
+
             // create a form and submit it
             var form = $('<form></form>');
             form.attr("method", "POST");

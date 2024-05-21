@@ -18,6 +18,9 @@ import cart.services as cart_services
 # Create your views here.
 @login_required
 def prepare_order(request):
+    if not request.user.is_customer:
+        return redirect('home')
+    
     if request.method == 'POST':
         books = request.POST.getlist('books[]')
         quantities = request.POST.getlist('quantities[]')
@@ -42,6 +45,9 @@ def prepare_order(request):
 
 @login_required
 def make_order(request):
+    if not request.user.is_customer:
+        return redirect('home')
+    
     prepared_order = request.session.get('prepared_order')
     if len(prepared_order["books"]) == 0:
         return redirect('home')
