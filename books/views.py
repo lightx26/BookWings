@@ -39,7 +39,7 @@ def view_books_by_filter(request):
     books = books_services.get_books_by_filter(input_title, category)
     categories = books_services.get_all_categories()
 
-    paginator = Paginator(books, 15)
+    paginator = Paginator(books, 16)
     page = request.GET.get('page', 1)
 
     return render(request, 'books/books.html',

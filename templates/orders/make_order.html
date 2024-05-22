@@ -67,9 +67,11 @@
                                             <label for="order_coupon_{{ coupon.id }}"
                                                    class="card-title text-danger text-bolder">
                                                 {% if coupon.type == 'PERCENTAGE' %}
-                                                    SAVE {{ coupon.discount | floatformat }}%
+                                                    <strong>SAVE {{ coupon.discount | floatformat }}%</strong>
+                                                    <small style="font-size: 0.8rem;">(up
+                                                        to {{ coupon.max_discount | floatformat }}₫)</small>
                                                 {% elif coupon.type == 'FIXED' %}
-                                                    SAVE {{ coupon.discount }} ₫
+                                                    <strong>SAVE {{ coupon.discount|floatformat }} ₫</strong>
                                                 {% endif %}
                                             </label>
                                             <div>
@@ -101,9 +103,9 @@
                                             <label for="delivery_coupon_{{ coupon.id }}"
                                                    class="card-title text-success text-bolder">
                                                 {% if coupon.type == 'PERCENTAGE' %}
-                                                    SAVE {{ coupon.discount | floatformat }}%
+                                                    <strong>SAVE {{ coupon.discount | floatformat }}%</strong>
                                                 {% elif coupon.type == 'FIXED' %}
-                                                    SAVE {{ coupon.discount }} ₫
+                                                    <strong>SAVE {{ coupon.discount|floatformat }} ₫</strong>
                                                 {% endif %}
                                             </label>
                                             <div>
@@ -125,7 +127,7 @@
                     <label for="shipping_company" class="form-label">Shipping company</label>
                     <select name="shipping_company" id="shipping_company" class="form-select">
                         {% for shipping_company in shipping_companies %}
-                            <option value="{{ shipping_company.id }}">{{ shipping_company.shipping_company_name }}</option>
+                            <option value="{{ shipping_company.id }}">{{ shipping_company.shipping_company_name }} ({{ shipping_company.shipping_fee | floatformat }} ₫)</option>
                         {% endfor %}
                     </select>
                 </div>

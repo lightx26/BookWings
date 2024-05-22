@@ -8,8 +8,8 @@
                     </div>
                 {% endif %}
                 <div style="text-align: center;">
-                    <img class="card-img-top" src="{% get_media_prefix %}{{ book.cover }}" alt="..."
-                         style="width: 200px; height: 300px; "/>
+                    <a href="{% url 'view_book_details' book.id book.slug %}"><img class="card-img-top" src="{% get_media_prefix %}{{ book.cover }}" alt="..."
+                         style="width: 200px; height: 300px; "/></a>
                 </div>
                 <div class="card-body p-4">
                     <div class="text-center">

@@ -22,9 +22,10 @@
             <div class="col-md-6">
                 <h1>{{ book.title }}</h1>
                 <p>Author: {{ book.author }}</p>
-                <p>Published: {{ book.published_date }}</p>
-                <p>Price: {{ book.price }}</p>
-                <p>Description: {{ book.description }}</p>
+                <p>Publisher: {{ book.publisher }}</p>
+                <p>Published in: {{ book.pub_date|date:"Y" }}</p>
+                <p>Price: {{ book.price | floatformat }} ₫</p>
+                <p>Description: {{ book.pages_num }} pages</p>
                 <a class="btn btn-primary" id="btn_add_to_cart">Add to Cart</a>
                 <a class="btn btn-dark" id="btnInstantPurchase">Instant Purchase</a>
                 <a class="btn btn-secondary">Read a sample</a>
