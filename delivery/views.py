@@ -3,7 +3,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from accounts.models import UserRole
 from accounts.decorators import role_required
-from .models import DeliveryInformation, DeliveryStatus
+from .models import Shipment, DeliveryStatus
 import delivery.services as delivery_services
 
 
@@ -46,7 +46,7 @@ def take_shipment(request, shipment_id):
 
 
 def return_shipment(request, shipment_id):
-    shipment = DeliveryInformation.objects.get(id=shipment_id)
+    shipment = Shipment.objects.get(id=shipment_id)
     if shipment.status == DeliveryStatus.DELIVERING:
         shipment.status = DeliveryStatus.ARRIVED
         shipment.delivery_by = None
@@ -58,7 +58,7 @@ def return_shipment(request, shipment_id):
 
 @role_required([UserRole.DELIVERER])
 def complete_shipment(request, shipment_id):
-    shipment = DeliveryInformation.objects.get(id=shipment_id)
+    shipment = Shipment.objects.get(id=shipment_id)
     if shipment.status == DeliveryStatus.DELIVERING:
         shipment.status = DeliveryStatus.DELIVERED
         shipment.finish_delivery_date = datetime.now()

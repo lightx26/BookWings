@@ -42,7 +42,8 @@
             </table>
 
             <div class="mb-3 text-end">
-                <h3>Total: {{ prepared_order.total | floatformat }} ₫</h3>
+                <h4 class="text-end mx-lg-6" style="margin-right: 10rem;" id="tmp_total">
+                    Subtotal: {{ prepared_order.total | floatformat }} ₫</h4>
             </div>
             <br>
             <hr>
@@ -127,7 +128,9 @@
                     <label for="shipping_company" class="form-label">Shipping company</label>
                     <select name="shipping_company" id="shipping_company" class="form-select">
                         {% for shipping_company in shipping_companies %}
-                            <option value="{{ shipping_company.id }}">{{ shipping_company.shipping_company_name }} ({{ shipping_company.shipping_fee | floatformat }} ₫)</option>
+                            <option value="{{ shipping_company.id }}">{{ shipping_company.shipping_company_name }}
+                                ({{ shipping_company.shipping_fee | floatformat }} ₫)
+                            </option>
                         {% endfor %}
                     </select>
                 </div>

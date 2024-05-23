@@ -24,7 +24,7 @@ class DeliveryStatus(models.TextChoices):
     DELIVERED = 'DELIVERED', 'Delivered'
 
 
-class DeliveryInformation(models.Model):
+class Shipment(models.Model):
     # Relationships
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)

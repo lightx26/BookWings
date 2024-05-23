@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from accounts.decorators import role_required
 from accounts.models import Address
 from coupons.models import CouponType, UsageType
-from delivery.models import Shipping, DeliveryStatus, DeliveryInformation
+from delivery.models import Shipping, DeliveryStatus, Shipment
 
 import orders.services as order_services
 import coupons.services as coupon_services

@@ -62,18 +62,50 @@
             {% include "books/book_render.html" with books=books %}
         </div>
 
+        {#        <div class="row mt-4">#}
+        {#            <div class="col-md-12">#}
+        {#                <div class="d-flex justify-content-center align-items-center">#}
+        {#                    {% if books.has_previous %}#}
+        {#                        <a href="?page=1" class="btn btn-dark m-lg-2">&laquo; First</a>#}
+        {#                        <a href="?page={{ books.previous_page_number }}"#}
+        {#                           class="btn btn-outline-dark">Previous</a>#}
+        {#                    {% endif %}#}
+        {#                    <span class="text-muted mx-2">Page {{ books.number }} of {{ books.paginator.num_pages }}</span>#}
+        {#                    {% if books.has_next %}#}
+        {#                        <a href="?page={{ books.next_page_number }}" class="btn btn-outline-dark">Next</a>#}
+        {#                        <a href="?page={{ books.paginator.num_pages }}" class="btn btn-dark m-lg-2">Last &raquo;</a>#}
+        {#                    {% endif %}#}
+        {#                </div>#}
+        {#            </div>#}
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="d-flex justify-content-center align-items-center">
                     {% if books.has_previous %}
-                        <a href="?page=1" class="btn btn-dark m-lg-2">&laquo; First</a>
-                        <a href="?page={{ books.previous_page_number }}"
-                           class="btn btn-outline-dark">Previous</a>
+                        <a href="?page=1" class="btn btn-outline-dark m-lg-2">&laquo; First</a>
+{#                        <a href="?page={{ books.previous_page_number }}" class="btn btn-outline-dark">Previous</a>#}
                     {% endif %}
-                    <span class="text-muted mx-2">Page {{ books.number }} of {{ books.paginator.num_pages }}</span>
+
+                    {% for num in books.paginator.page_range %}
+                        {% if books.number == num %}
+                            <span class="btn btn-dark m-lg-2">{{ num }}</span>
+                        {% elif num > books.number|add:'-3' and num < books.number|add:'3' %}
+                            <a href="?page={{ num }}" class="btn btn-outline-dark m-lg-2">{{ num }}</a>
+                        {% elif num == 1 %}
+                            <a href="?page={{ num }}" class="btn btn-outline-dark m-lg-2">{{ num }}</a>
+                            {% if books.number > 4 %}
+                                <span class="mx-1">...</span>
+                            {% endif %}
+                        {% elif num == books.paginator.num_pages %}
+                            {% if books.number < books.paginator.num_pages|add:'-3' %}
+                                <span class="mx-1">...</span>
+                            {% endif %}
+                            <a href="?page={{ num }}" class="btn btn-outline-dark m-lg-2">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
                     {% if books.has_next %}
-                        <a href="?page={{ books.next_page_number }}" class="btn btn-outline-dark">Next</a>
-                        <a href="?page={{ books.paginator.num_pages }}" class="btn btn-dark m-lg-2">Last &raquo;</a>
+{#                        <a href="?page={{ books.next_page_number }}" class="btn btn-outline-dark">Next</a>#}
+                        <a href="?page={{ books.paginator.num_pages }}" class="btn btn-outline-dark m-lg-2">Last &raquo;</a>
                     {% endif %}
                 </div>
             </div>

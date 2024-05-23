@@ -16,8 +16,8 @@ class Order(models.Model):
     date_ordered = models.DateTimeField(auto_now_add=True)
 
     def set_delivery_info(self, address, shipping_company, delivery_fee):
-        DeliveryInformation = import_string('delivery.models.DeliveryInformation')
-        return DeliveryInformation.objects.create(order=self,
+        Shipment = import_string('delivery.models.Shipment')
+        return Shipment.objects.create(order=self,
                                                   address=address,
                                                   shipping_company=shipping_company,
                                                   delivery_fee=delivery_fee,
@@ -26,17 +26,17 @@ class Order(models.Model):
     @property
     def delivery_info(self):
         try:
-            DeliveryInformation = import_string('delivery.models.DeliveryInformation')
-            return DeliveryInformation.objects.get(order=self).status
-        except DeliveryInformation.DoesNotExist:
+            Shipment = import_string('delivery.models.Shipment')
+            return Shipment.objects.get(order=self).status
+        except Shipment.DoesNotExist:
             return None
         
     @property
     def delivery_address(self):
         try:
-            DeliveryInformation = import_string('delivery.models.DeliveryInformation')
-            return DeliveryInformation.objects.get(order=self).address
-        except DeliveryInformation.DoesNotExist:
+            Shipment = import_string('delivery.models.Shipment')
+            return Shipment.objects.get(order=self).address
+        except Shipment.DoesNotExist:
             return None
 
     def add_product(self, book, quantity):

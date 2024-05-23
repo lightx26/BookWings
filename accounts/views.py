@@ -151,6 +151,7 @@ def view_profile(request):
     else:
         return render(request, 'user/admin-profile.html', {'user': user})
 
+
 @role_required([UserRole.CUSTOMER])
 def view_customer_profile(request, customer, addresses):
     return render(request, 'user/customer-profile.html', {'user': customer, 'addresses': addresses})
@@ -159,3 +160,15 @@ def view_customer_profile(request, customer, addresses):
 @role_required([UserRole.DELIVERER])
 def view_deliverer_profile(request, deliverer):
     return render(request, 'user/deliverer-profile.html', {'deliverer': deliverer})
+
+
+@role_required([UserRole.CUSTOMER])
+def update_customer_profile(request):
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+        user.save()
+
+    return redirect('profile')

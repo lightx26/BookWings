@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from accounts.admin import ViewOnlyAdmin
-from delivery.models import Shipping, DeliveryInformation
+from delivery.models import Shipping, Shipment
 
 
 # Register your models here.
@@ -14,4 +14,4 @@ class DeliveryInfoAdmin(ViewOnlyAdmin):
 
 
 admin.site.register(Shipping)
-admin.site.register(DeliveryInformation, DeliveryInfoAdmin)
+admin.site.register(Shipment, DeliveryInfoAdmin)
