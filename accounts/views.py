@@ -162,8 +162,8 @@ def view_deliverer_profile(request, deliverer):
     return render(request, 'user/deliverer-profile.html', {'deliverer': deliverer})
 
 
-@role_required([UserRole.CUSTOMER])
-def update_customer_profile(request):
+@login_required
+def update_profile(request):
     if request.method == 'POST':
         user = request.user
         user.first_name = request.POST.get('first_name')
