@@ -11,9 +11,9 @@
     </header>
     <section class="py-5">
         <div class="mb3 d-flex justify-content-center" role="group" aria-label="Filter orders">
-            <button class="btn btn-outline-dark active switch-btn" id="delivered" style="width: 200px">Delivered
+            <button class="btn btn-outline-dark active switch-btn" id="delivering" style="width: 200px">Delivering
             </button>
-            <button class="btn btn-outline-dark switch-btn" id="delivering" style="width: 200px">Delivering
+            <button class="btn btn-outline-dark  switch-btn" id="delivered" style="width: 200px">Delivered
             </button>
         </div>
         <div class="orders-section">
@@ -64,7 +64,7 @@
                     loadOrders(type)
                 });
                 
-                loadOrders('delivered');
+                loadOrders('delivering');
 
                 $('.orders-section').on('click', '.view-order-detail', function () {
                     var order_id = $(this).closest('tr').find('td').eq(0).text();

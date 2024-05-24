@@ -30,9 +30,11 @@ load_dotenv(dotenv_path=dotenv_path)
 SECRET_KEY = 'django-insecure-iztf$h!xjqg2kl3q^o&cq%f1l*zq)vl66u0r&@as2eo=h43mpx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+CSRF_TRUSTED_ORIGINS = ['https://*.ngrok-free.app','https://*.127.0.0.1', 'https://*.ngrok.io', 'https://*.herokuapp.com']
+
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -148,6 +150,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
    os.path.join(BASE_DIR, "static"),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'

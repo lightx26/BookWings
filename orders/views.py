@@ -53,6 +53,17 @@ def make_order(request):
         return redirect('home')
 
     if request.method == 'POST':
+        # Set delivery information
+        try:
+            shipping_company = order_services.get_shipping_company_by_id(request.POST.get('shipping_company'))
+        except Shipping.DoesNotExist:
+            # TODO: Redirect to error page
+            return redirect('home')
+        try:
+            address = accounts_services.get_address_by_id(request.POST.get('address'))
+        except Address.DoesNotExist:
+            return redirect('update-address')
+                
         # Create initial order
         order = order_services.create_order(request.user, prepared_order.get('total'))
 
@@ -64,18 +75,6 @@ def make_order(request):
         delivery_coupon = request.POST.get('delivery_coupon')
         if delivery_coupon:
             order.coupon.add(coupon_services.get_coupon_by_id(delivery_coupon))
-
-        # Set delivery information
-        try:
-            shipping_company = order_services.get_shipping_company_by_id(request.POST.get('shipping_company'))
-        except Shipping.DoesNotExist:
-            # TODO: Redirect to error page
-            return redirect('home')
-
-        try:
-            address = accounts_services.get_address_by_id(request.POST.get('address'))
-        except Address.DoesNotExist:
-            return redirect('update-address')
 
         delivery_info = order.set_delivery_info(address, shipping_company, shipping_company.shipping_fee)
 
@@ -119,7 +118,7 @@ def make_order(request):
         # Clear unused session after processing
         request.session.pop('prepared_order')
 
-        return redirect('home')
+        return redirect('view_orders')
 
     addresses = accounts_services.get_addresses_by_user(request.user)
     shipping_companies = order_services.get_all_shipping_companies()
@@ -181,8 +180,8 @@ def view_order_details(request, order_id):
     else:
         order_items = []
 
-    if hasattr(order, 'deliveryinformation'):
-        delivery_info = order.deliveryinformation
+    if hasattr(order, 'shipment'):
+        delivery_info = order.shipment
     else:
         delivery_info = None
 
