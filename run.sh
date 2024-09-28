@@ -1,0 +1,1 @@
+gunicorn --bind localhost:8800 BookWings.wsgi:application

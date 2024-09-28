@@ -25,10 +25,10 @@
                         books</label>
                     {% if input_title == '' %}
                         <input type="text" id="search" name="search" class="form-control"
-                               placeholder="Type the name...">
+                               placeholder="Enter book title, author...">
                     {% else %}
                         <input type="text" id="search" name="search" class="form-control"
-                               placeholder="Type the name..."
+                               placeholder="Enter book title, author..."
                                value="{{ input_title }}">
                     {% endif %}
                 </div>
@@ -59,7 +59,19 @@
 
         <div class="container px-4 px-lg-5 mt-5 bg-white rounded-4 shadow">
             <br>
-            {% include "books/book_render.html" with books=books %}
+
+            {# check if books is null#}
+            {% if books %}
+                    {% include "books/book_render.html" with books=books %}
+            {% else %}
+                <div class="text-center">
+                    <h2>No books found</h2>
+                    <br><br><br><br><br><br>
+                    <a href="{% url 'view_books' %}" class="btn btn-outline-dark m-lg-2">Back to all books</a>
+                    <br><br><br><br><br><br>
+                    <br><br><br><br><br><br>
+                </div>
+            {% endif %}
         </div>
 
         {#        <div class="row mt-4">#}
